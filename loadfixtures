@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# db piallation
+rm data/bricks.set
+rm data/bricks.shop
+rm data/bricks.insight
+
+# add sets
+curl -H "Content-Type: application/json" -X POST --data '{}' http://localhost:8080/api/v1/set/75105 # millenium falcon;
+curl -H "Content-Type: application/json" -X POST --data '{}' http://localhost:8080/api/v1/set/21108 # ghostbuster car
+curl -H "Content-Type: application/json" -X POST --data '{}' http://localhost:8080/api/v1/set/21320 # big bang theory
+
+# add shops
+curl -H "Content-Type: application/json" -X POST --data '{"name":"Toys Center","address":"Piazzale della Cooperazione, 4, 47122 Forlì FC"}' http://localhost:8080/api/v1/shop/
+
+# all insights
+curl -H "Content-Type: application/json" -X POST --data '{"shop":"toys-center","set":"75105","value":"15800"}' http://localhost:8080/api/v1/insight/
