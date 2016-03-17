@@ -1,9 +1,10 @@
 <?php
 
+use Bricks\Insight;
 use Bricks\Persist;
 use Bricks\Set;
 use Bricks\Shop;
-use Bricks\Insight;
+use Bricks\Response\ErrorResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,19 +48,6 @@ $app->get('/api/v1/stats/', function () use ($app) {
     $content = json_encode($json);
 
     return new Response($content, 200);
-});
-
-$app->get('/', function () use ($app) {
-    /** @todo define an error table with api error code */
-    $status = 'error';
-    $code = '404';
-    $message = 'Page not found';
-
-    return new Response(json_encode([
-        'status' => $status,
-        'code' => $code,
-        'message' => $message,
-    ]), 404);
 });
 
 $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
@@ -315,6 +303,14 @@ $app->post('/api/v1/insight/', function (Request $request) use ($app) {
     return new Response(
         $content,
         201
+    );
+});
+
+$app->error(function (\Exception $e) {
+    return new Response(
+        ErrorResponse::withDefaultMessage()
+            ->jsonSerialize(),
+        404
     );
 });
 

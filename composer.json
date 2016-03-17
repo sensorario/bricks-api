@@ -1,10 +1,18 @@
 {
     "require": {
-        "silex/silex": "^1.3"
+        "silex/silex": "^1.3",
+        "phpunit/phpunit": "^5.2"
+    },
+    "config": {
+        "bin-dir": "bin/"
     },
     "autoload": {
         "psr-4": {
             "": ["src/"]
         }
+    },
+    "require-dev": {
+        "symfony/browser-kit": "^3.0",
+        "symfony/css-selector": "^3.0"
     }
 }
