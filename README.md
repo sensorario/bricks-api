@@ -12,18 +12,6 @@ First of all, load fixtures, and then run server. This api run inside PHP built-
 ./runserver
 ```
 
-### add new lego set
-
-curl -H "Content-Type: application/json" -X POST --data '{}' http://localhost:8080/api/v1/set/75105 # millenium falcon;
-
-### add new shop
-
-curl -H "Content-Type: application/json" -X POST --data '{"name":"Toys Center","address":"Piazzale della Cooperazione, 4, 47122 Forlì FC"}' http://localhost:8080/api/v1/shop/
-
-### add new insight
-
-curl -H "Content-Type: application/json" -X POST --data '{"shop":"toys-center","set":"75105","value":"15800"}' http://localhost:8080/api/v1/insight/
-
 ## php.ini configuration
 
 Due to a [php 5.6 bug](http://stackoverflow.com/questions/26261001/warning-about-http-raw-post-data-being-deprecated),  some warning could appear in log. To solve this little issue uncomment this line in php.ini
