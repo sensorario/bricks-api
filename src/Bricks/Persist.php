@@ -9,7 +9,7 @@ final class Persist
     public static function jsonSerializable(
         JsonSerializable $json
     ) {
-        $fileName = 'data/' . strtolower(
+        $fileName = 'app/data/' . strtolower(
             str_replace('\\', '.', get_class($json))
         );
 

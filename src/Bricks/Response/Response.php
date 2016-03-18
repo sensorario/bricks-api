@@ -19,8 +19,10 @@ final class Response
     public function withKeyValue($key, $value)
     {
         if ($key == 'links') {
+            $newObject = $this;
+
             foreach ($value as $link) {
-                $newObject = $this->withLink($link);
+                $newObject = $newObject->withLink($link);
             }
 
             return $newObject;

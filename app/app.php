@@ -9,6 +9,7 @@ use Bricks\Shop;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 require_once 'vendor/autoload.php';
 
@@ -26,23 +27,24 @@ $app->after(function (Request $request, Response $response) {
 });
 
 $app->get('/api/v1/stats/', function () use ($app) {
-    $response = BricksResponse::createEmpty()
-        ->withKeyValue('sets', count(file('data/bricks.set')))
-        ->withKeyValue('insights', count(file('data/bricks.insight')))
-        ->withKeyValue('shops', count(file('data/bricks.shop')))
+    /** @todo creare response inside a factory */
+    /** @todo create a configuration file */
+    $brickResponse = BricksResponse::createEmpty()
+        ->withKeyValue('sets', count(file('app/data/bricks.set')))
+        ->withKeyValue('insights', count(file('app/data/bricks.insight')))
+        ->withKeyValue('shops', count(file('app/data/bricks.shop')))
         ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-        ->withLink(['rel' => 'self', 'href' => '/stats/'])
-    ;
+        ->withLink(['rel' => 'self', 'href' => '/stats/']);
 
-    $content = json_encode(
-        $response->asArray()
+    return new JsonResponse(
+        $brickResponse->asArray(),
+        200
     );
-
-    return new Response($content, 200);
 });
 
 $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
-    $handle = file('data/bricks.insight');
+    /** @todo move outside this path */
+    $handle = file('app/data/bricks.insight');
     foreach ($handle as $insight) {
         $item = unserialize($insight);
         if ($item->getTimestamp() == $timestamp) {
@@ -52,30 +54,23 @@ $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
                 ->withKeyValue('value', $item->getValue())
                 ->withKeyValue('update', $item->getUpdate())
                 ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-                ->withLink(['rel' => 'self', 'href' => '/shop/' . $item->getShop()])
-            ;
+                ->withLink(['rel' => 'self', 'href' => '/shop/' . $item->getShop()]);
 
-            return new Response(
-                json_encode($response->asArray()),
-                200
-            );
+            return new JsonResponse($response->asArray(), 200);
         }
     }
 
     /** @todo define an error table with api error code */
-    $status = 'error';
-    $code = '32432423';
-    $message = 'No insight found';
-
-    return new Response(json_encode([
-        'status' => $status,
-        'code' => $code,
-        'message' => $message,
-    ]), 404);
+    return new JsonResponse([
+        'status' => 'error',
+        'code' => 404,
+        'message' => 'No insight found',
+    ], 404);
 });
 
 $app->get('/api/v1/shop/{slug}', function ($slug) use ($app) {
-    $handle = file('data/bricks.shop');
+    /** @todo move this path outside from here */
+    $handle = file('app/data/bricks.shop');
     foreach ($handle as $shop) {
         $item = unserialize($shop);
         if ($item->getSlug() == $slug) {
@@ -84,31 +79,24 @@ $app->get('/api/v1/shop/{slug}', function ($slug) use ($app) {
                 ->withKeyValue('slug', $item->getSlug())
                 ->withKeyValue('address', $item->getAddress())
                 ->withKeyValue('update', $item->getUpdate())
+                /** @todo improve withLink method signature */
                 ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-                ->withLink(['rel' => 'self', 'href' => '/shop/' . $item->getSlug()])
-            ;
+                ->withLink(['rel' => 'self', 'href' => '/shop/' . $item->getSlug()]);
 
-            return new Response(
-                json_encode($response->asArray()),
-                200
-            );
+            return new JsonResponse($response->asArray(), 200);
         }
     }
 
     /** @todo define an error table with api error code */
-    $status = 'error';
-    $code = '2344324';
-    $message = 'Shop not found';
-
-    return new Response(json_encode([
-        'status' => $status,
-        'code' => $code,
-        'message' => $message,
-    ]), 404);
+    return new JsonResponse([
+        'status' => 'error',
+        'code' => 404,
+        'message' => 'Shop not found',
+    ], 404);
 });
 
 $app->get('/api/v1/set/{code}', function ($code) use ($app) {
-    $handle = file('data/bricks.set');
+    $handle = file('app/data/bricks.set');
     foreach ($handle as $set) {
         $item = unserialize($set);
         if ($item->getCode() == $code) {
@@ -117,13 +105,9 @@ $app->get('/api/v1/set/{code}', function ($code) use ($app) {
                 ->withKeyValue('update', $item->getUpdate())
                 ->withLink(['rel' => 'self', 'href' => '/set/' . $item->getCode()])
                 ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-                ->withLink(['rel' => 'collection', 'href' => '/sets/'])
-            ;
+                ->withLink(['rel' => 'collection', 'href' => '/sets/']);
 
-            return new Response(
-                json_encode($response->asArray()),
-                200
-            );
+            return new JsonResponse($response->asArray(), 200);
         }
     }
 });
@@ -134,21 +118,22 @@ $app->get('/api/v1/homepage/', function () use ($app) {
         ->withLink(['rel' => 'sets', 'href' => '/sets/'])
         ->withLink(['rel' => 'shops', 'href' => '/shops/'])
         ->withLink(['rel' => 'insights', 'href' => '/insights/'])
-        ->withLink(['rel' => 'stats', 'href' => '/stats/'])
-    ;
+        ->withLink(['rel' => 'stats', 'href' => '/stats/']);
 
-    return json_encode($response->asArray());
+    return new JsonResponse($response->asArray(), 200);
 });
 
 $app->get('/api/v1/sets/', function () use ($app) {
     $sets = [];
     $links = [];
 
-    if (file_exists('data/bricks.set')) {
-        $handle = file('data/bricks.set');
+    /** @todo move these paths outside from here */
+    if (file_exists('app/data/bricks.set')) {
+        $handle = file('app/data/bricks.set');
         foreach ($handle as $set) {
             $item = unserialize($set);
             $sets[] = $item->jsonSerialize();
+            /** @todo introduce LinkValue Object */
             $links[] = [
                 'rel' => 'set ' . $item->getCode(),
                 'href' => '/set/' . $item->getCode()
@@ -160,23 +145,22 @@ $app->get('/api/v1/sets/', function () use ($app) {
         ->withKeyValue('collection', $sets)
         ->withKeyValue('links', $links)
         ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-        ->withLink(['rel' => 'collection', 'href' => '/sets/'])
-    ;
+        ->withLink(['rel' => 'collection', 'href' => '/sets/']);
 
-    return new Response(
-        json_encode($response->asArray()),
-        200
-    );
+    return new JsonResponse($response->asArray(), 200);
 });
 
 $app->get('/api/v1/insights/', function () use ($app) {
     $insights = [];
+    $links = [];
 
-    if (file_exists('data/bricks.insight')) {
-        $handle = file('data/bricks.insight');
+    /** @todo move outsite path data responsibility */
+    if (file_exists('app/data/bricks.insight')) {
+        $handle = file('app/data/bricks.insight');
         foreach ($handle as $set) {
             $item = unserialize($set);
             $insights[] = $item->jsonSerialize();
+            /** @todo introduce LinkValue Object */
             $links[] = ['rel' => 'set ' . $item->getSet(), 'href' => '/set/' . $item->getSet()];
             $links[] = ['rel' => 'set ' . $item->getShop(), 'href' => '/shop/' . $item->getShop()];
             $links[] = ['rel' => 'insight ' . $item->getTimestamp(), 'href' => '/insight/' . $item->getTimestamp()];
@@ -187,21 +171,17 @@ $app->get('/api/v1/insights/', function () use ($app) {
         ->withKeyValue('collection', $insights)
         ->withKeyValue('links', $links)
         ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-        ->withLink(['rel' => 'collection', 'href' => '/insights/'])
-    ;
+        ->withLink(['rel' => 'collection', 'href' => '/insights/']);
 
-    return new Response(
-        json_encode($response->asArray()),
-        200
-    );
+    return new JsonResponse($response->asArray(), 200);
 });
 
 $app->get('/api/v1/shops/', function () use ($app) {
     $shops = [];
     $links = [];
 
-    if (file_exists('data/bricks.shop')) {
-        $handle = file('data/bricks.shop');
+    if (file_exists('app/data/bricks.shop')) {
+        $handle = file('app/data/bricks.shop');
         foreach ($handle as $set) {
             $item = unserialize($set);
             $shops[] = $item->jsonSerialize();
@@ -213,83 +193,65 @@ $app->get('/api/v1/shops/', function () use ($app) {
         ->withKeyValue('collection', $shops)
         ->withKeyValue('links', $links)
         ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-        ->withLink(['rel' => 'collection', 'href' => '/shops/'])
-    ;
+        ->withLink(['rel' => 'collection', 'href' => '/shops/']);
 
-    return new Response(
-        json_encode($response->asArray()),
-        200
-    );
+    return new JsonResponse($response->asArray(), 200);
 });
 
 $app->post('/api/v1/set/{code}', function ($code) use ($app) {
-    if (file_exists('data/bricks.set')) {
-        $handle = file('data/bricks.set');
+    if (file_exists('app/data/bricks.set')) {
+        $handle = file('app/data/bricks.set');
         foreach ($handle as $set) {
             $item = unserialize($set);
             if ($item->getCode() == $code) {
-                return new Response(json_encode([
+                return new JsonResponse([
                     'status' => 'error',
                     'code' => 409,
                     'message' => 'Set ' . $item->getCode() . ' already exists',
-                ]), 409);
+                ], 409);
             }
         }
     }
 
     $set = Set::fromCode($code);
     Persist::jsonSerializable($set);
-    $json = $set->jsonSerialize();
-    $content = json_encode($json);
+    $setAsArray = $set->jsonSerialize();
 
-    return new Response(
-        $content,
-        201
-    );
+    return new JsonResponse($setAsArray, 201);
 });
 
 $app->post('/api/v1/shop/', function (Request $request) use ($app) {
-    if (file_exists('data/bricks.shop')) {
-        $handle = file('data/bricks.shop');
+    if (file_exists('app/data/bricks.shop')) {
+        $handle = file('app/data/bricks.shop');
         foreach ($handle as $set) {
             $item = unserialize($set);
             if ($item->getAddress() == $request->request->get('address')) {
-                return new Response(json_encode([
+                return new JsonResponse([
                     'status' => 'error',
                     'code' => 409,
                     'message' => 'Set ' . $item->getCode() . ' already exists',
-                ]), 409);
+                ], 409);
             }
         }
     }
 
     $shop = Shop::fromRequest($request);
     Persist::jsonSerializable($shop);
-    $json = $shop->jsonSerialize();
+    $shopAsArray = $shop->jsonSerialize();
 
-    $content = json_encode($json);
-
-    return new Response(
-        $content,
-        201
-    );
+    return new JsonResponse($shopAsArray, 201);
 });
 
 $app->post('/api/v1/insight/', function (Request $request) use ($app) {
     $insight = Insight::fromRequest($request);
     Persist::jsonSerializable($insight);
-    $json = $insight->jsonSerialize();
+    $insihtAsArray = $insight->jsonSerialize();
 
-    $content = json_encode($json);
-
-    return new Response(
-        $content,
-        201
-    );
+    return new JsonResponse($insihtAsArray, 201);
 });
 
 $app->error(function (\Exception $e) {
-    return new Response(
+    return new JsonResponse(
         ErrorResponse::withDefaultMessage()
             ->jsonSerialize(),
         404

@@ -31,7 +31,7 @@ class InvalidRequestTest extends WebTestCase
     public function testErrorPageMessageContent()
     {
         $this->assertEquals(
-            ErrorResponse::withDefaultMessage()->jsonSerialize(),
+            json_encode(ErrorResponse::withDefaultMessage()->jsonSerialize()),
             $this->client->getResponse()->getContent()
         );
     }

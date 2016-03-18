@@ -24,10 +24,10 @@ final class ErrorResponse implements JsonSerializable
 
     public function jsonSerialize()
     {
-        return json_encode([
+        return [
             'status' => $this->status,
             'code' => $this->code,
             'message' => $this->message,
-        ]);
+        ];
     }
 }
