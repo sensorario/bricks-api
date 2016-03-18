@@ -30,18 +30,17 @@ final class Set implements JsonSerializable
         return [
             'code' => $this->code,
             'update' => $this->update->setTimeZone(new DateTimeZone('UTC')),
-            'links' => [[
-                'rel' => 'self',
-                'href' => 'http://localhost:8080/api/v1/set/' . $this->code,
-            ],[
-                'rel' => 'collection',
-                'href' => 'http://localhost:8080/api/v1/sets/',
-            ],],
         ];
     }
+
 
     public function getCode()
     {
         return $this->code;
+    }
+    
+    public function getUpdate()
+    {
+        return $this->update;
     }
 }

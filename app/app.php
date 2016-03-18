@@ -105,14 +105,15 @@ $app->get('/api/v1/set/{code}', function ($code) use ($app) {
     foreach ($handle as $set) {
         $item = unserialize($set);
         if ($item->getCode() == $code) {
-            $json = $item->jsonSerialize();
-            $json['links'][] = [
-                'rel' => 'homepage',
-                'href' => 'http://localhost:8080/api/v1/homepage/',
-            ];
+            $response = BricksResponse::createEmpty();
+            $response = $response->withKeyValue('code', $item->getCode());
+            $response = $response->withKeyValue('update', $item->getUpdate());
+            $response = $response->withLink(['rel' => 'self', 'href' => 'http://localhost:8080/api/v1/set/' . $item->getCode()]);
+            $response = $response->withLink(['rel' => 'homepage', 'href' => 'http://localhost:8080/api/v1/homepage/']);
+            $response = $response->withLink(['rel' => 'collection', 'href' => 'http://localhost:8080/api/v1/sets/']);
 
             return new Response(
-                json_encode($json),
+                json_encode($response->asArray()),
                 200
             );
         }
