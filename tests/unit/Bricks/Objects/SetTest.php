@@ -9,14 +9,17 @@ final class SetTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->randomCode = rand(11111, 99999);
-        $this->set = Set::fromCode($this->randomCode);
+        $this->set = Set::box([
+            'code' => $this->randomCode,
+            'update' => new \DateTime('now'),
+        ]);
     }
 
     public function testHasCode()
     {
         $this->assertEquals(
             $this->randomCode,
-            $this->set->getCode()
+            $this->set->get('code')
         );
     }
 

@@ -2,45 +2,36 @@
 
 namespace Bricks\Objects;
 
-use DateTime;
-use DateTimeZone;
+use Sensorario\ValueObject\ValueObject;
 use JsonSerializable;
 
-final class Set implements JsonSerializable
+final class Set
+    extends ValueObject
+    implements JsonSerializable
 {
-    private $code;
-
-    private $update;
-
-    private function __construct(array $properties)
+    public static function mandatory()
     {
-        $this->code = $properties['code'];
-        $this->update = new DateTime('now');
-    }
-
-    public static function fromCode($code)
-    {
-        return new self([
-            'code' => $code,
-        ]);
+        return [
+            'code',
+            'update'
+        ];
     }
 
     public function jsonSerialize()
     {
         return [
-            'code' => $this->code,
-            'update' => $this->update->setTimeZone(new DateTimeZone('UTC')),
+            'code' => $this->get('code'),
+            'update' => $this->get('update')
+                ->setTimeZone(new \DateTimeZone('UTC')),
         ];
     }
 
-
-    public function getCode()
+    public static function rules()
     {
-        return $this->code;
-    }
-    
-    public function getUpdate()
-    {
-        return $this->update;
+        return [
+            'update' => [
+                'object' => 'DateTime'
+            ]
+        ];
     }
 }

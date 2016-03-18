@@ -50,10 +50,10 @@ class ResponseFactory
     public function getSet(Set $item)
     {
         return $this->getEmptyResponse()
-            ->withKeyValue('code', $item->getCode())
-            ->withKeyValue('update', $item->getUpdate())
+            ->withKeyValue('code', $item->get('code'))
+            ->withKeyValue('update', $item->get('update'))
 
-            ->withLink('self', '/set/' . $item->getCode())
+            ->withLink('self', '/set/' . $item->get('code'))
             ->withLink('collection', '/sets/')
         ;
     }

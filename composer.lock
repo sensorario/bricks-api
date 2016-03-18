@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "71386b3a862504f1638f2ffe29148c26",
-    "content-hash": "6eac0343cecdebf67087f4684d0ed92b",
+    "hash": "f1d67fa8872af2690e557fea7e7e813b",
+    "content-hash": "040e51f864a42d208f4e4070ebc82e31",
     "packages": [
         {
             "name": "behat/behat",
@@ -1810,6 +1810,47 @@
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
             "time": "2016-02-04 12:56:52"
+        },
+        {
+            "name": "sensorario/value-object",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sensorario/value-object.git",
+                "reference": "ab856e6b51eaaef4a8394bf0a225c17ae42baefc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sensorario/value-object/zipball/ab856e6b51eaaef4a8394bf0a225c17ae42baefc",
+                "reference": "ab856e6b51eaaef4a8394bf0a225c17ae42baefc",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "@dev"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": []
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Simone Gentili",
+                    "email": "sensorario@gmail.com",
+                    "homepage": "http://sensorario.github.io",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Value Object Implementation in PHP?",
+            "time": "2016-03-16 10:52:01"
         },
         {
             "name": "silex/silex",

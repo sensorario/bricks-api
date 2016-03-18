@@ -74,7 +74,7 @@ $app->get('/api/v1/set/{code}', function ($code) use ($app) {
     $handle = file('app/data/bricks.objects.set');
     foreach ($handle as $set) {
         $item = unserialize($set);
-        if ($item->getCode() == $code) {
+        if ($item->get('code') == $code) {
             $json = $app['response']->getSet($item);
             return new JsonResponse($json->asArray(), 200);
         }
@@ -98,11 +98,12 @@ $app->get('/api/v1/sets/', function () use ($app) {
             $sets[] = $item->jsonSerialize();
             /** @todo introduce LinkValue Object */
             $links[] = [
-                'rel' => 'set ' . $item->getCode(),
-                'href' => '/set/' . $item->getCode()
+                'rel' => 'set ' . $item->get('code'),
+                'href' => '/set/' . $item->get('code')
             ];
         }
     }
+
 
     $json = $app['response']->getCollection('/sets/', $sets, $links);
     return new JsonResponse($json->asArray(), 200);
@@ -151,19 +152,23 @@ $app->post('/api/v1/set/{code}', function ($code) use ($app) {
         $handle = file('app/data/bricks.objects.set');
         foreach ($handle as $set) {
             $item = unserialize($set);
-            if ($item->getCode() == $code) {
+            if ($item->get('code') == $code) {
                 return new JsonResponse([
                     'status' => 'error',
                     'code' => 409,
-                    'message' => 'Set ' . $item->getCode() . ' already exists',
+                    'message' => 'Set ' . $item->get('code') . ' already exists',
                 ], 409);
             }
         }
     }
 
-    $set = Set::fromCode($code);
-    Persist::jsonSerializable($set);
-    $setAsArray = $set->jsonSerialize();
+    $setValue = Set::box([
+        'code' => $code,
+        'update' => new \DateTime('now'),
+    ]);
+
+    Persist::jsonSerializable($setValue);
+    $setAsArray = $setValue->jsonSerialize();
 
     return new JsonResponse($setAsArray, 201);
 });
@@ -199,8 +204,9 @@ $app->post('/api/v1/insight/', function (Request $request) use ($app) {
 });
 
 $app->error(function (\Exception $e) {
+    /** @todo add monolog to log exception message */
     return new JsonResponse(
-        ErrorResponse::withDefaultMessage()
+        ErrorResponse::withMessage('Invalid request')
             ->jsonSerialize(),
         404
     );

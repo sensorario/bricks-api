@@ -13,12 +13,12 @@ final class ErrorResponse implements JsonSerializable
         $this->message = $parameters['message'];
     }
 
-    public static function withDefaultMessage()
+    public static function withMessage($message)
     {
         return new self([
             'status' => 'error',
             'code' => '404',
-            'message' => 'Invalid request',
+            'message' => $message,
         ]);
     }
 
