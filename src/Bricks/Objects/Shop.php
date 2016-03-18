@@ -5,6 +5,7 @@ namespace Bricks\Objects;
 use Sensorario\ValueObject\ValueObject;
 use JsonSerializable;
 
+/** @codeCoverageIgnore */
 final class Shop
     extends ValueObject
     implements ObjectInterface
@@ -24,8 +25,7 @@ final class Shop
             'name' => $this->get('name'),
             'address' => $this->get('address'),
             'slug' => $this->getSlug(),
-            'update' => $this->get('update')
-                ->setTimeZone(new \DateTimeZone('UTC')),
+            'update' => $this->get('update'),
         ];
     }
 
@@ -50,7 +50,7 @@ final class Shop
         return '/shops/';
     }
 
-    public function getselfuri()
+    public function getSelfUri()
     {
         return '/shop/' . $this->getSlug();
     }
