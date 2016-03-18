@@ -4,11 +4,11 @@ namespace Bricks\Response;
 
 use PHPUnit_Framework_TestCase;
 
-final class ResponseBuilderTest extends PHPUnit_Framework_TestCase
+final class ResponseTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->emptyResponse = ResponseBuilder::createEmpty();
+        $this->emptyResponse = Response::createEmpty();
     }
 
     public function testDefaultResponseIsAnEmptyArray()

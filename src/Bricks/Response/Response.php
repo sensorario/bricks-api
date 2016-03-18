@@ -2,7 +2,7 @@
 
 namespace Bricks\Response;
 
-final class ResponseBuilder
+final class Response
 {
     private $properties;
 
