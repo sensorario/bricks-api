@@ -5,6 +5,7 @@ use Bricks\Persist;
 use Bricks\Set;
 use Bricks\Shop;
 use Bricks\Response\ErrorResponse;
+use Bricks\Response\Response as BricksResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,27 +26,16 @@ $app->after(function (Request $request, Response $response) {
 });
 
 $app->get('/api/v1/stats/', function () use ($app) {
-    $numberOfSets = count(file('data/bricks.set'));
-    $numberOfInsights = count(file('data/bricks.insight'));
-    $numberOfShops = count(file('data/bricks.shop'));
+    $response = BricksResponse::createEmpty();
+    $response = $response->withKeyValue('sets', count(file('data/bricks.set')));
+    $response = $response->withKeyValue('insights', count(file('data/bricks.insight')));
+    $response = $response->withKeyValue('shops', count(file('data/bricks.shop')));
+    $response = $response->withLink(['rel' => 'homepage', 'href' => 'http://localhost:8080/api/v1/homepage/']);
+    $response = $response->withLink(['rel' => 'self', 'href' => 'http://localhost:8080/api/v1/stats/']);
 
-    $json = [
-        'sets' => $numberOfSets,
-        'insights' => $numberOfInsights,
-        'shops' => $numberOfShops,
-    ];
-
-    $json['links'][] = [
-        'rel' => 'homepage',
-        'href' => 'http://localhost:8080/api/v1/homepage/',
-    ];
-
-    $json['links'][] = [
-        'rel' => 'self',
-        'href' => 'http://localhost:8080/api/v1/stats/',
-    ];
-
-    $content = json_encode($json);
+    $content = json_encode(
+        $response->asArray()
+    );
 
     return new Response($content, 200);
 });
