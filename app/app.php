@@ -4,7 +4,6 @@ use Bricks\Factories\ResponseFactory;
 use Bricks\Insight;
 use Bricks\Persist;
 use Bricks\Response\ErrorResponse;
-use Bricks\Response\Response as BricksResponse;
 use Bricks\Set;
 use Bricks\Shop;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 require_once 'vendor/autoload.php';
 
 $app = new Silex\Application();
-$app['response.factory'] = function () {
+$app['response'] = function () {
     return new ResponseFactory();
 };
 
@@ -31,30 +30,18 @@ $app->after(function (Request $request, Response $response) {
 });
 
 $app->get('/api/v1/stats/', function () use ($app) {
-    /** @todo create a configuration file */
-    $brickResponse = $app['response.factory']->getStatistics();
-
-    return new JsonResponse(
-        $brickResponse->asArray(),
-        200
-    );
+    $json = $app['response']->getStatistics();
+    return new JsonResponse($json->asArray());
 });
 
 $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
     /** @todo move outside this path */
-    $handle = file('app/data/bricks.insight');
-    foreach ($handle as $insight) {
-        $item = unserialize($insight);
-        if ($item->getTimestamp() == $timestamp) {
-            $response = BricksResponse::createEmpty()
-                ->withKeyValue('shop', $item->getShop())
-                ->withKeyValue('set', $item->getSet())
-                ->withKeyValue('value', $item->getValue())
-                ->withKeyValue('update', $item->getUpdate())
-                ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-                ->withLink(['rel' => 'self', 'href' => '/shop/' . $item->getShop()]);
-
-            return new JsonResponse($response->asArray(), 200);
+    $insightCollection = file('app/data/bricks.insight');
+    foreach ($insightCollection as $insightItem) {
+        $insight = unserialize($insightItem);
+        if ($insight->getTimestamp() == $timestamp) {
+            $json = $app['response']->getInsight($insight);
+            return new JsonResponse($json->asArray(), 200);
         }
     }
 
@@ -72,16 +59,8 @@ $app->get('/api/v1/shop/{slug}', function ($slug) use ($app) {
     foreach ($handle as $shop) {
         $item = unserialize($shop);
         if ($item->getSlug() == $slug) {
-            $response = BricksResponse::createEmpty()
-                ->withKeyValue('name', $item->getName())
-                ->withKeyValue('slug', $item->getSlug())
-                ->withKeyValue('address', $item->getAddress())
-                ->withKeyValue('update', $item->getUpdate())
-                /** @todo improve withLink method signature */
-                ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-                ->withLink(['rel' => 'self', 'href' => '/shop/' . $item->getSlug()]);
-
-            return new JsonResponse($response->asArray(), 200);
+            $json = $app['response']->getShop($item);
+            return new JsonResponse($json->asArray(), 200);
         }
     }
 
@@ -98,27 +77,15 @@ $app->get('/api/v1/set/{code}', function ($code) use ($app) {
     foreach ($handle as $set) {
         $item = unserialize($set);
         if ($item->getCode() == $code) {
-            $response = BricksResponse::createEmpty()
-                ->withKeyValue('code', $item->getCode())
-                ->withKeyValue('update', $item->getUpdate())
-                ->withLink(['rel' => 'self', 'href' => '/set/' . $item->getCode()])
-                ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-                ->withLink(['rel' => 'collection', 'href' => '/sets/']);
-
-            return new JsonResponse($response->asArray(), 200);
+            $json = $app['response']->getSet($item);
+            return new JsonResponse($json->asArray(), 200);
         }
     }
 });
 
 $app->get('/api/v1/homepage/', function () use ($app) {
-    $response = BricksResponse::createEmpty()
-        ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-        ->withLink(['rel' => 'sets', 'href' => '/sets/'])
-        ->withLink(['rel' => 'shops', 'href' => '/shops/'])
-        ->withLink(['rel' => 'insights', 'href' => '/insights/'])
-        ->withLink(['rel' => 'stats', 'href' => '/stats/']);
-
-    return new JsonResponse($response->asArray(), 200);
+    $json = $app['response']->getHomepage();
+    return new JsonResponse($json->asArray(), 200);
 });
 
 $app->get('/api/v1/sets/', function () use ($app) {
@@ -139,13 +106,8 @@ $app->get('/api/v1/sets/', function () use ($app) {
         }
     }
 
-    $response = BricksResponse::createEmpty()
-        ->withKeyValue('collection', $sets)
-        ->withKeyValue('links', $links)
-        ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-        ->withLink(['rel' => 'collection', 'href' => '/sets/']);
-
-    return new JsonResponse($response->asArray(), 200);
+    $json = $app['response']->getLegoSets($sets, $links);
+    return new JsonResponse($json->asArray(), 200);
 });
 
 $app->get('/api/v1/insights/', function () use ($app) {
@@ -165,13 +127,8 @@ $app->get('/api/v1/insights/', function () use ($app) {
         }
     }
 
-    $response = BricksResponse::createEmpty()
-        ->withKeyValue('collection', $insights)
-        ->withKeyValue('links', $links)
-        ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-        ->withLink(['rel' => 'collection', 'href' => '/insights/']);
-
-    return new JsonResponse($response->asArray(), 200);
+    $json = $app['response']->getInsightCollection($insights, $links);
+    return new JsonResponse($json->asArray(), 200);
 });
 
 $app->get('/api/v1/shops/', function () use ($app) {
@@ -187,13 +144,8 @@ $app->get('/api/v1/shops/', function () use ($app) {
         }
     }
 
-    $response = BricksResponse::createEmpty()
-        ->withKeyValue('collection', $shops)
-        ->withKeyValue('links', $links)
-        ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-        ->withLink(['rel' => 'collection', 'href' => '/shops/']);
-
-    return new JsonResponse($response->asArray(), 200);
+    $json = $app['response']->getShops($shops, $links);
+    return new JsonResponse($json->asArray(), 200);
 });
 
 $app->post('/api/v1/set/{code}', function ($code) use ($app) {
