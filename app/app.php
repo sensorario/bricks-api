@@ -26,12 +26,12 @@ $app->after(function (Request $request, Response $response) {
 });
 
 $app->get('/api/v1/stats/', function () use ($app) {
-    $response = BricksResponse::createEmpty();
-    $response = $response->withKeyValue('sets', count(file('data/bricks.set')));
-    $response = $response->withKeyValue('insights', count(file('data/bricks.insight')));
-    $response = $response->withKeyValue('shops', count(file('data/bricks.shop')));
-    $response = $response->withLink(['rel' => 'homepage', 'href' => 'http://localhost:8080/api/v1/homepage/']);
-    $response = $response->withLink(['rel' => 'self', 'href' => 'http://localhost:8080/api/v1/stats/']);
+    $response = BricksResponse::createEmpty()
+        ->withKeyValue('sets', count(file('data/bricks.set')))
+        ->withKeyValue('insights', count(file('data/bricks.insight')))
+        ->withKeyValue('shops', count(file('data/bricks.shop')))
+        ->withLink(['rel' => 'homepage', 'href' => 'http://localhost:8080/api/v1/homepage/'])
+        ->withLink(['rel' => 'self', 'href' => 'http://localhost:8080/api/v1/stats/']);
 
     $content = json_encode(
         $response->asArray()
@@ -105,12 +105,12 @@ $app->get('/api/v1/set/{code}', function ($code) use ($app) {
     foreach ($handle as $set) {
         $item = unserialize($set);
         if ($item->getCode() == $code) {
-            $response = BricksResponse::createEmpty();
-            $response = $response->withKeyValue('code', $item->getCode());
-            $response = $response->withKeyValue('update', $item->getUpdate());
-            $response = $response->withLink(['rel' => 'self', 'href' => 'http://localhost:8080/api/v1/set/' . $item->getCode()]);
-            $response = $response->withLink(['rel' => 'homepage', 'href' => 'http://localhost:8080/api/v1/homepage/']);
-            $response = $response->withLink(['rel' => 'collection', 'href' => 'http://localhost:8080/api/v1/sets/']);
+            $response = BricksResponse::createEmpty()
+                ->withKeyValue('code', $item->getCode())
+                ->withKeyValue('update', $item->getUpdate())
+                ->withLink(['rel' => 'self', 'href' => 'http://localhost:8080/api/v1/set/' . $item->getCode()])
+                ->withLink(['rel' => 'homepage', 'href' => 'http://localhost:8080/api/v1/homepage/'])
+                ->withLink(['rel' => 'collection', 'href' => 'http://localhost:8080/api/v1/sets/']);
 
             return new Response(
                 json_encode($response->asArray()),
@@ -142,31 +142,32 @@ $app->get('/api/v1/homepage/', function () use ($app) {
 });
 
 $app->get('/api/v1/sets/', function () use ($app) {
+    $response = BricksResponse::createEmpty();
+
     $sets = [];
+    $links = [];
 
     if (file_exists('data/bricks.set')) {
         $handle = file('data/bricks.set');
         foreach ($handle as $set) {
             $item = unserialize($set);
             $sets[] = $item->jsonSerialize();
+            $links[] = [
+                'rel' => 'code ' . $item->getCode(),
+                'href' => 'http://localhost:8080/api/v1/set/' . $item->getCode()
+            ];
         }
     }
 
-    $json = [
-        'content' => $sets,
-        'links' => [[
-            'rel' => 'collection',
-            'href' => 'http://localhost:8080/api/v1/sets/',
-         ],],
-    ];
-
-    $json['links'][] = [
-        'rel' => 'homepage',
-        'href' => 'http://localhost:8080/api/v1/homepage/',
-    ];
+    $response = $response
+        ->withKeyValue('collection', $sets)
+        ->withKeyValue('links', $links)
+        ->withLink(['rel' => 'homepage', 'href' => 'http://localhost:8080/api/v1/homepage/'])
+        ->withLink(['rel' => 'collection', 'href' => 'http://localhost:8080/api/v1/sets/'])
+    ;
 
     return new Response(
-        json_encode($json),
+        json_encode($response->asArray()),
         200
     );
 });
