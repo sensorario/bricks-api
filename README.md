@@ -4,9 +4,11 @@ This is a little api REST that aims to expose some methods to save shops and leg
 
 ## usages
 
-This api run inside PHP built-in web server. Just run the script `runserver` to see it in your browser.
+First of all, load fixtures, and then run server. This api run inside PHP built-in web server. Just run the script `runserver` to see it in your browser.
+
 
 ```bash
+./loadfixtures
 ./runserver
 ```
 
