@@ -4,6 +4,12 @@ This is a little api REST that aims to expose some methods to save shops and leg
 
 ## usages
 
+This api run inside PHP built-in web server. Just run the script `runserver` to see it in your browser.
+
+```bash
+./runserver
+```
+
 ### add new lego set
 
 curl -H "Content-Type: application/json" -X POST --data '{}' http://localhost:8080/api/v1/set/75105 # millenium falcon;
