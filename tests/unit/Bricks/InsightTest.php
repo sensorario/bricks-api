@@ -35,19 +35,6 @@ final class InsightTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->randomShop, $this->jsonResponse['shop']);
     }
 
-    public function testShopCollectionAppearsInLinks()
-    {
-        $shopLinkFound = false;
-
-        foreach ($this->jsonResponse['links'] as $link) {
-            if ($link['href'] == 'http://localhost:8080/api/v1/shop/' . $this->randomShop) {
-                $shopLinkFound = true;
-            }
-        }
-
-        $this->assertTrue($shopLinkFound);
-    }
-
     public function testTimestampIsInUTCFormat()
     {
         $this->assertEquals(
