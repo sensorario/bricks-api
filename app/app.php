@@ -1,19 +1,23 @@
 <?php
 
+use Bricks\Factories\ResponseFactory;
 use Bricks\Insight;
 use Bricks\Persist;
 use Bricks\Response\ErrorResponse;
 use Bricks\Response\Response as BricksResponse;
 use Bricks\Set;
 use Bricks\Shop;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 require_once 'vendor/autoload.php';
 
 $app = new Silex\Application();
+$app['response.factory'] = function () {
+    return new ResponseFactory();
+};
 
 $app->before(function (Request $request) {
     if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
@@ -27,14 +31,8 @@ $app->after(function (Request $request, Response $response) {
 });
 
 $app->get('/api/v1/stats/', function () use ($app) {
-    /** @todo creare response inside a factory */
     /** @todo create a configuration file */
-    $brickResponse = BricksResponse::createEmpty()
-        ->withKeyValue('sets', count(file('app/data/bricks.set')))
-        ->withKeyValue('insights', count(file('app/data/bricks.insight')))
-        ->withKeyValue('shops', count(file('app/data/bricks.shop')))
-        ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-        ->withLink(['rel' => 'self', 'href' => '/stats/']);
+    $brickResponse = $app['response.factory']->getStatistics();
 
     return new JsonResponse(
         $brickResponse->asArray(),
