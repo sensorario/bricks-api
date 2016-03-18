@@ -9,8 +9,13 @@ final class SetTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->randomCode = rand(11111, 99999);
+        $this->randomName = 'name';
+        $this->randomPieces = rand(11111, 99999);
+
         $this->set = Set::box([
             'code' => $this->randomCode,
+            'name' => $this->randomName,
+            'pieces' => $this->randomPieces,
             'update' => new \DateTime('now'),
         ]);
     }
