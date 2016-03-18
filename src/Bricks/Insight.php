@@ -41,24 +41,21 @@ final class Insight implements JsonSerializable
             'set' => $this->set,
             'value' => $this->value,
             'update' => $this->update->setTimeZone(new DateTimeZone('UTC')),
-            'links' => [[
-                'rel' => 'self',
-                'href' => 'http://localhost:8080/api/v1/insight/' . $this->update->getTimestamp(),
-            ],[
-                'rel' => 'shop',
-                'href' => 'http://localhost:8080/api/v1/shop/' . $this->shop,
-            ],[
-                'rel' => 'set',
-                'href' => 'http://localhost:8080/api/v1/set/' . $this->set,
-            ],[
-                'rel' => 'collection',
-                'href' => 'http://localhost:8080/api/v1/insights/',
-            ],],
         ];
     }
 
     public function getTimestamp()
     {
         return $this->update->getTimestamp();
+    }
+
+    public function getSet()
+    {
+        return $this->set;
+    }
+
+    public function getShop()
+    {
+        return $this->shop;
     }
 }

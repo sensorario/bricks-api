@@ -2,10 +2,10 @@
 
 use Bricks\Insight;
 use Bricks\Persist;
-use Bricks\Set;
-use Bricks\Shop;
 use Bricks\Response\ErrorResponse;
 use Bricks\Response\Response as BricksResponse;
+use Bricks\Set;
+use Bricks\Shop;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -121,29 +121,18 @@ $app->get('/api/v1/set/{code}', function ($code) use ($app) {
 });
 
 $app->get('/api/v1/homepage/', function () use ($app) {
-    return json_encode([
-        'links' => [[
-            'rel' => 'self',
-            'href' => 'http://localhost:8080/api/v1/homepage/',
-        ],[
-            'rel' => 'sets',
-            'href' => 'http://localhost:8080/api/v1/sets/',
-        ],[
-            'rel' => 'shops',
-            'href' => 'http://localhost:8080/api/v1/shops/',
-        ],[
-            'rel' => 'insights',
-            'href' => 'http://localhost:8080/api/v1/insights/',
-        ],[
-            'rel' => 'stats',
-            'href' => 'http://localhost:8080/api/v1/stats/',
-        ],]
-    ]);
+    $response = BricksResponse::createEmpty()
+        ->withLink(['rel' => 'homepage', 'href' => 'http://localhost:8080/api/v1/homepage/'])
+        ->withLink(['rel' => 'sets', 'href' => 'http://localhost:8080/api/v1/sets/'])
+        ->withLink(['rel' => 'shops', 'href' => 'http://localhost:8080/api/v1/shops/'])
+        ->withLink(['rel' => 'insights', 'href' => 'http://localhost:8080/api/v1/insights/'])
+        ->withLink(['rel' => 'stats', 'href' => 'http://localhost:8080/api/v1/stats/'])
+    ;
+
+    return json_encode($response->asArray());
 });
 
 $app->get('/api/v1/sets/', function () use ($app) {
-    $response = BricksResponse::createEmpty();
-
     $sets = [];
     $links = [];
 
@@ -153,13 +142,13 @@ $app->get('/api/v1/sets/', function () use ($app) {
             $item = unserialize($set);
             $sets[] = $item->jsonSerialize();
             $links[] = [
-                'rel' => 'code ' . $item->getCode(),
+                'rel' => 'set ' . $item->getCode(),
                 'href' => 'http://localhost:8080/api/v1/set/' . $item->getCode()
             ];
         }
     }
 
-    $response = $response
+    $response = BricksResponse::createEmpty()
         ->withKeyValue('collection', $sets)
         ->withKeyValue('links', $links)
         ->withLink(['rel' => 'homepage', 'href' => 'http://localhost:8080/api/v1/homepage/'])
@@ -180,54 +169,59 @@ $app->get('/api/v1/insights/', function () use ($app) {
         foreach ($handle as $set) {
             $item = unserialize($set);
             $insights[] = $item->jsonSerialize();
+            $links[] = [
+                'rel' => 'set ' . $item->getSet(),
+                'href' => 'http://localhost:8080/api/v1/set/' . $item->getSet()
+            ];
+            $links[] = [
+                'rel' => 'set ' . $item->getShop(),
+                'href' => 'http://localhost:8080/api/v1/shop/' . $item->getShop()
+            ];
+            $links[] = [
+                'rel' => 'insight ' . $item->getTimestamp(),
+                'href' => 'http://localhost:8080/api/v1/insight/' . $item->getTimestamp()
+            ];
         }
     }
 
-    $json = [
-        'content' => $insights,
-        'links' => [[
-            'rel' => 'collection',
-            'href' => 'http://localhost:8080/api/v1/insights/',
-         ],],
-    ];
-
-    $json['links'][] = [
-        'rel' => 'homepage',
-        'href' => 'http://localhost:8080/api/v1/homepage/',
-    ];
+    $response = BricksResponse::createEmpty()
+        ->withKeyValue('collection', $insights)
+        ->withKeyValue('links', $links)
+        ->withLink(['rel' => 'homepage', 'href' => 'http://localhost:8080/api/v1/homepage/'])
+        ->withLink(['rel' => 'collection', 'href' => 'http://localhost:8080/api/v1/insights/'])
+    ;
 
     return new Response(
-        json_encode($json),
+        json_encode($response->asArray()),
         200
     );
 });
 
 $app->get('/api/v1/shops/', function () use ($app) {
     $shops = [];
+    $links = [];
 
     if (file_exists('data/bricks.shop')) {
         $handle = file('data/bricks.shop');
         foreach ($handle as $set) {
             $item = unserialize($set);
             $shops[] = $item->jsonSerialize();
+            $links[] = [
+                'rel' => 'shop ' . $item->getSlug(),
+                'href' => 'http://localhost:8080/api/v1/shop/' . $item->getSlug()
+            ];
         }
     }
 
-    $json = [
-        'content' => $shops,
-        'links' => [[
-            'rel' => 'collection',
-            'href' => 'http://localhost:8080/api/v1/shops/',
-         ],],
-    ];
-
-    $json['links'][] = [
-        'rel' => 'homepage',
-        'href' => 'http://localhost:8080/api/v1/homepage/',
-    ];
+    $response = BricksResponse::createEmpty()
+        ->withKeyValue('collection', $shops)
+        ->withKeyValue('links', $links)
+        ->withLink(['rel' => 'homepage', 'href' => 'http://localhost:8080/api/v1/homepage/'])
+        ->withLink(['rel' => 'collection', 'href' => 'http://localhost:8080/api/v1/shops/'])
+    ;
 
     return new Response(
-        json_encode($json),
+        json_encode($response->asArray()),
         200
     );
 });
