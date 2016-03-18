@@ -10,14 +10,14 @@ class ResponseFactory
 {
     public function getHomepage()
     {
-        return $this->getEmptyResponse()
+        return $this->getBaseResponse()
             ->withLink('sets', '/sets/')
             ->withLink('shops', '/shops/')
             ->withLink('insights', '/insights/')
             ->withLink('stats', '/stats/');
     }
 
-    private function getEmptyResponse()
+    private function getBaseResponse()
     {
         return Response::createEmpty()
             ->withLink('homepage', '/homepage/');
@@ -25,7 +25,7 @@ class ResponseFactory
 
     public function getStatistics()
     {
-        return $this->getEmptyResponse()
+        return $this->getBaseResponse()
             ->withKeyValue('sets', count(file('app/data/bricks.objects.set')))
             ->withKeyValue('insights', count(file('app/data/bricks.objects.insight')))
             ->withKeyValue('shops', count(file('app/data/bricks.objects.shop')))
@@ -34,7 +34,7 @@ class ResponseFactory
 
     public function getObject(ObjectInterface $item)
     {
-        $response = $this->getEmptyResponse()
+        $response = $this->getBaseResponse()
             ->withLink('self', $item->getSelfUri())
             ->withLink('collection', $item->getCollectionUri());
 
@@ -47,7 +47,7 @@ class ResponseFactory
 
     public function getCollection($link, $collection, $links)
     {
-        return $this->getEmptyResponse()
+        return $this->getBaseResponse()
             ->withKeyValue('collection', $collection)
             ->withKeyValue('links', $links)
             ->withLink('collection', $link);
