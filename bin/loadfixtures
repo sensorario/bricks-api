@@ -6,9 +6,23 @@ rm app/data/bricks.objects.shop
 rm app/data/bricks.objects.insight
 
 # add sets
-curl -H "Content-Type: application/json" -X POST --data '{}' http://localhost:8080/api/v1/set/75105 # millenium falcon;
-curl -H "Content-Type: application/json" -X POST --data '{}' http://localhost:8080/api/v1/set/21108 # ghostbuster car
-curl -H "Content-Type: application/json" -X POST --data '{}' http://localhost:8080/api/v1/set/21320 # big bang theory
+curl -H "Content-Type: application/json" -X POST --data "{
+    \"name\":\"Millenium falcon\",
+    \"pieces\":\"1330\",
+    \"code\":\"75105\"
+}" http://localhost:8080/api/v1/set/
+
+curl -H "Content-Type: application/json" -X POST --data "{
+    \"name\":\"Ghostbuster\",
+    \"pieces\":\"508\",
+    \"code\":\"21108\"
+}" http://localhost:8080/api/v1/set/
+
+curl -H "Content-Type: application/json" -X POST --data "{
+    \"name\":\"The Big Bang Theory\",
+    \"pieces\":\"484\",
+    \"code\":\"21320\"
+}" http://localhost:8080/api/v1/set/
 
 # add shops
 curl -H "Content-Type: application/json" -X POST --data "{

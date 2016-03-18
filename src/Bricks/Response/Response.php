@@ -42,7 +42,7 @@ final class Response
         $newProperties = $this->properties;
 
         $route['href'] = 'http://localhost:8080/api/v1' . $href;
-        $route['rel'] = 'self';
+        $route['rel'] = $rel;
 
         if (isset($newProperties['links'])) {
             $newProperties['links'][] = $route;

@@ -13,6 +13,8 @@ final class Set
     {
         return [
             'code',
+            'name',
+            'pieces',
             'update'
         ];
     }
@@ -21,6 +23,8 @@ final class Set
     {
         return [
             'code' => $this->get('code'),
+            'name' => $this->get('name'),
+            'pieces' => $this->get('pieces'),
             'update' => $this->get('update')
                 ->setTimeZone(new \DateTimeZone('UTC')),
         ];

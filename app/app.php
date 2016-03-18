@@ -147,12 +147,12 @@ $app->get('/api/v1/shops/', function () use ($app) {
     return new JsonResponse($json->asArray(), 200);
 });
 
-$app->post('/api/v1/set/{code}', function ($code) use ($app) {
+$app->post('/api/v1/set/', function (Request $request) use ($app) {
     if (file_exists('app/data/bricks.objects.set')) {
         $handle = file('app/data/bricks.objects.set');
         foreach ($handle as $set) {
             $item = unserialize($set);
-            if ($item->get('code') == $code) {
+            if ($item->get('code') == $request->request->get('code')) {
                 return new JsonResponse([
                     'status' => 'error',
                     'code' => 409,
@@ -163,7 +163,9 @@ $app->post('/api/v1/set/{code}', function ($code) use ($app) {
     }
 
     $setValue = Set::box([
-        'code' => $code,
+        'code' => $request->request->get('code'),
+        'name' => $request->request->get('name'),
+        'pieces' => $request->request->get('pieces'),
         'update' => new \DateTime('now'),
     ]);
 

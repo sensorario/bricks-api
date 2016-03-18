@@ -52,6 +52,8 @@ class ResponseFactory
         return $this->getEmptyResponse()
             ->withKeyValue('code', $item->get('code'))
             ->withKeyValue('update', $item->get('update'))
+            ->withKeyValue('pieces', $item->get('pieces'))
+            ->withKeyValue('name', $item->get('name'))
 
             ->withLink('self', '/set/' . $item->get('code'))
             ->withLink('collection', '/sets/')
