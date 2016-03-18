@@ -16,8 +16,8 @@ class ResponseFactory
             ->withKeyValue('sets', count(file('app/data/bricks.set')))
             ->withKeyValue('insights', count(file('app/data/bricks.insight')))
             ->withKeyValue('shops', count(file('app/data/bricks.shop')))
-            ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-            ->withLink(['rel' => 'self', 'href' => '/stats/']);
+            ->withLink('homepage', '/homepage/')
+            ->withLink('self', '/stats/');
     }
 
     public function getInsight(Insight $insight)
@@ -27,18 +27,18 @@ class ResponseFactory
             ->withKeyValue('set', $insight->getSet())
             ->withKeyValue('value', $insight->getValue())
             ->withKeyValue('update', $insight->getUpdate())
-            ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-            ->withLink(['rel' => 'self', 'href' => '/shop/' . $insight->getShop()]);
+            ->withLink('homepage', '/homepage/')
+            ->withLink('self', '/shop/' . $insight->getShop());
     }
 
     public function getHomepage()
     {
         return Response::createEmpty()
-            ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-            ->withLink(['rel' => 'sets', 'href' => '/sets/'])
-            ->withLink(['rel' => 'shops', 'href' => '/shops/'])
-            ->withLink(['rel' => 'insights', 'href' => '/insights/'])
-            ->withLink(['rel' => 'stats', 'href' => '/stats/']);
+            ->withLink('homepage', '/homepage/')
+            ->withLink('sets', '/sets/')
+            ->withLink('shops', '/shops/')
+            ->withLink('insights', '/insights/')
+            ->withLink('stats', '/stats/');
     }
 
     public function getLegoSets($sets, $links)
@@ -46,8 +46,8 @@ class ResponseFactory
         return Response::createEmpty()
             ->withKeyValue('collection', $sets)
             ->withKeyValue('links', $links)
-            ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-            ->withLink(['rel' => 'collection', 'href' => '/sets/']);
+            ->withLink('homepage', '/homepage/')
+            ->withLink('collection', '/sets/');
     }
 
     public function getSet(Set $item)
@@ -55,9 +55,9 @@ class ResponseFactory
         return Response::createEmpty()
             ->withKeyValue('code', $item->getCode())
             ->withKeyValue('update', $item->getUpdate())
-            ->withLink(['rel' => 'self', 'href' => '/set/' . $item->getCode()])
-            ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-            ->withLink(['rel' => 'collection', 'href' => '/sets/']);
+            ->withLink('self', '/set/' . $item->getCode())
+            ->withLink('homepage', '/homepage/')
+            ->withLink('collection', '/sets/');
     }
 
     public function getInsightCollection($insights, $links)
@@ -65,8 +65,8 @@ class ResponseFactory
         return Response::createEmpty()
             ->withKeyValue('collection', $insights)
             ->withKeyValue('links', $links)
-            ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-            ->withLink(['rel' => 'collection', 'href' => '/insights/']);
+            ->withLink('homepage', '/homepage/')
+            ->withLink('collection', '/insights/');
     }
 
     public function getShops($shops, $links)
@@ -74,8 +74,8 @@ class ResponseFactory
         return Response::createEmpty()
             ->withKeyValue('collection', $shops)
             ->withKeyValue('links', $links)
-            ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-            ->withLink(['rel' => 'collection', 'href' => '/shops/']);
+            ->withLink('homepage', '/homepage/')
+            ->withLink('collection', '/shops/');
     }
 
     public function getShop(Shop $item)
@@ -85,7 +85,7 @@ class ResponseFactory
             ->withKeyValue('slug', $item->getSlug())
             ->withKeyValue('address', $item->getAddress())
             ->withKeyValue('update', $item->getUpdate())
-            ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-            ->withLink(['rel' => 'self', 'href' => '/shop/' . $item->getSlug()]);
+            ->withLink('homepage', '/homepage/')
+            ->withLink('self', '/shop/' . $item->getSlug());
     }
 }

@@ -22,7 +22,10 @@ final class Response
             $newObject = $this;
 
             foreach ($value as $link) {
-                $newObject = $newObject->withLink($link);
+                $newObject = $newObject->withLink(
+                    $link['rel'],
+                    $link['href']
+                );
             }
 
             return $newObject;
@@ -34,10 +37,13 @@ final class Response
         ));
     }
 
-    public function withLink($route)
+    public function withLink($rel, $href)
     {
         $newProperties = $this->properties;
-        $route['href'] = 'http://localhost:8080/api/v1' . $route['href'];
+
+        $route['href'] = 'http://localhost:8080/api/v1' . $href;
+        $route['rel'] = 'self';
+
         if (isset($newProperties['links'])) {
             $newProperties['links'][] = $route;
         } else {
