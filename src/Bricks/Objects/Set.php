@@ -44,7 +44,7 @@ final class Set
         return '/sets/';
     }
 
-    public function getSelfuri()
+    public function getSelfUri()
     {
         return '/set/' . $this->get('code');
     }
