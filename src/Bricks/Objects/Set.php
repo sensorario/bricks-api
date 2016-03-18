@@ -7,7 +7,7 @@ use JsonSerializable;
 
 final class Set
     extends ValueObject
-    implements JsonSerializable, ObjectInterface
+    implements ObjectInterface
 {
     public static function mandatory()
     {
