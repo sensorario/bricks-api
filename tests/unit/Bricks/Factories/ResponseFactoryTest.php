@@ -12,8 +12,11 @@ final class ResponseFactoryTest extends PHPUnit_Framework_TestCase
 
         $this->objectInterface = $this
             ->getMockBuilder('Bricks\\Objects\\ObjectInterface')
-            ->setMethods(['jsonSerialize','getCollectionUri','getSelfUri'])
-            ->getMock();
+            ->setMethods([
+                'jsonSerialize',
+                'getCollectionUri',
+                'getSelfUri'
+            ])->getMock();
 
         $this->objectInterface->expects($this->once())
             ->method('jsonSerialize')
