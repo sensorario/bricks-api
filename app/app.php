@@ -1,13 +1,8 @@
 <?php
 
 use Bricks\Factories\ResponseFactory;
-use Bricks\Insight;
-use Bricks\Persist;
 use Bricks\Response\ErrorResponse;
-use Bricks\Set;
-use Bricks\Shop;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
