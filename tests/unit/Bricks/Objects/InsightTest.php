@@ -1,6 +1,6 @@
 <?php
 
-namespace Bricks;
+namespace Bricks\Objects;
 
 use PHPUnit_Framework_TestCase;
 use DateTime;

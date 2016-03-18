@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # db piallation
-rm app/data/bricks.set
-rm app/data/bricks.shop
-rm app/data/bricks.insight
+rm app/data/bricks.objects.set
+rm app/data/bricks.objects.shop
+rm app/data/bricks.objects.insight
 
 # add sets
 curl -H "Content-Type: application/json" -X POST --data '{}' http://localhost:8080/api/v1/set/75105 # millenium falcon;

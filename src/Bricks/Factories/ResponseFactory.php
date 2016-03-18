@@ -2,10 +2,10 @@
 
 namespace Bricks\Factories;
 
-use Bricks\Insight;
+use Bricks\Objects\Insight;
+use Bricks\Objects\Set;
+use Bricks\Objects\Shop;
 use Bricks\Response\Response;
-use Bricks\Set;
-use Bricks\Shop;
 
 /** @todo inject a service that count resources */
 class ResponseFactory

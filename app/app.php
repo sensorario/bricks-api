@@ -1,5 +1,9 @@
 <?php
 
+use Bricks\Objects\Insight;
+use Bricks\Objects\Set;
+use Bricks\Objects\Shop;
+use Bricks\Persist;
 use Bricks\Response\ErrorResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +34,7 @@ $app->get('/api/v1/stats/', function () use ($app) {
 
 $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
     /** @todo move outside this path */
-    $insightCollection = file('app/data/bricks.insight');
+    $insightCollection = file('app/data/bricks.objects.insight');
     foreach ($insightCollection as $insightItem) {
         $insight = unserialize($insightItem);
         if ($insight->getTimestamp() == $timestamp) {
@@ -49,7 +53,7 @@ $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
 
 $app->get('/api/v1/shop/{slug}', function ($slug) use ($app) {
     /** @todo move this path outside from here */
-    $handle = file('app/data/bricks.shop');
+    $handle = file('app/data/bricks.objects.shop');
     foreach ($handle as $shop) {
         $item = unserialize($shop);
         if ($item->getSlug() == $slug) {
@@ -67,7 +71,7 @@ $app->get('/api/v1/shop/{slug}', function ($slug) use ($app) {
 });
 
 $app->get('/api/v1/set/{code}', function ($code) use ($app) {
-    $handle = file('app/data/bricks.set');
+    $handle = file('app/data/bricks.objects.set');
     foreach ($handle as $set) {
         $item = unserialize($set);
         if ($item->getCode() == $code) {
@@ -87,8 +91,8 @@ $app->get('/api/v1/sets/', function () use ($app) {
     $links = [];
 
     /** @todo move these paths outside from here */
-    if (file_exists('app/data/bricks.set')) {
-        $handle = file('app/data/bricks.set');
+    if (file_exists('app/data/bricks.objects.set')) {
+        $handle = file('app/data/bricks.objects.set');
         foreach ($handle as $set) {
             $item = unserialize($set);
             $sets[] = $item->jsonSerialize();
@@ -109,8 +113,8 @@ $app->get('/api/v1/insights/', function () use ($app) {
     $links = [];
 
     /** @todo move outsite path data responsibility */
-    if (file_exists('app/data/bricks.insight')) {
-        $handle = file('app/data/bricks.insight');
+    if (file_exists('app/data/bricks.objects.insight')) {
+        $handle = file('app/data/bricks.objects.insight');
         foreach ($handle as $set) {
             $item = unserialize($set);
             $insights[] = $item->jsonSerialize();
@@ -129,8 +133,8 @@ $app->get('/api/v1/shops/', function () use ($app) {
     $shops = [];
     $links = [];
 
-    if (file_exists('app/data/bricks.shop')) {
-        $handle = file('app/data/bricks.shop');
+    if (file_exists('app/data/bricks.objects.shop')) {
+        $handle = file('app/data/bricks.objects.shop');
         foreach ($handle as $set) {
             $item = unserialize($set);
             $shops[] = $item->jsonSerialize();
@@ -143,8 +147,8 @@ $app->get('/api/v1/shops/', function () use ($app) {
 });
 
 $app->post('/api/v1/set/{code}', function ($code) use ($app) {
-    if (file_exists('app/data/bricks.set')) {
-        $handle = file('app/data/bricks.set');
+    if (file_exists('app/data/bricks.objects.set')) {
+        $handle = file('app/data/bricks.objects.set');
         foreach ($handle as $set) {
             $item = unserialize($set);
             if ($item->getCode() == $code) {
@@ -165,8 +169,8 @@ $app->post('/api/v1/set/{code}', function ($code) use ($app) {
 });
 
 $app->post('/api/v1/shop/', function (Request $request) use ($app) {
-    if (file_exists('app/data/bricks.shop')) {
-        $handle = file('app/data/bricks.shop');
+    if (file_exists('app/data/bricks.objects.shop')) {
+        $handle = file('app/data/bricks.objects.shop');
         foreach ($handle as $set) {
             $item = unserialize($set);
             if ($item->getAddress() == $request->request->get('address')) {
