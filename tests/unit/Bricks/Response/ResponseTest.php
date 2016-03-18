@@ -100,4 +100,34 @@ final class ResponseTest extends PHPUnit_Framework_TestCase
             $newResponse->asArray()
         );
     }
+
+    public function testLinksShouldBeAddableAsArray()
+    {
+        $addableLinks = [
+            [
+                'rel' => 'self',
+                'href' => '/foo/',
+            ]
+        ];
+
+        $expectedArray = [
+            'links' => [
+                [
+                    'rel' => 'self',
+                    'href' => 'http://localhost:8080/api/v1/foo/',
+                ]
+            ]
+        ];
+
+        $newResponse = $this->emptyResponse
+            ->withKeyValue(
+                'links',
+                $addableLinks
+            );
+
+        $this->assertEquals(
+            $expectedArray,
+            $newResponse->asArray()
+        );
+    }
 }
