@@ -10,3 +10,7 @@ Feature: all end points must be available
         | "/stats"    |
         | "/shops"    |
         | "/insights" |
+
+    Scenario: a client look for an end point
+        Given go to "/some-invalid-url"
+        Then the response status code should be 404
