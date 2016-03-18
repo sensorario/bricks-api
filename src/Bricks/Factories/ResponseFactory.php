@@ -17,7 +17,7 @@ class ResponseFactory
             ->withLink('stats', '/stats/');
     }
 
-    private function getBaseResponse()
+    public function getBaseResponse()
     {
         return Response::createEmpty()
             ->withLink('homepage', '/homepage/');
