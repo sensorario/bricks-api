@@ -1,6 +1,5 @@
 <?php
 
-use Bricks\Factories\ResponseFactory;
 use Bricks\Response\ErrorResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,7 +9,7 @@ require_once 'vendor/autoload.php';
 
 $app = new Silex\Application();
 $app['response'] = function () {
-    return new ResponseFactory();
+    return new Bricks\Factories\ResponseFactory();
 };
 
 $app->before(function (Request $request) {
