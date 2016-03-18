@@ -58,4 +58,14 @@ final class Insight implements JsonSerializable
     {
         return $this->shop;
     }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public function getUpdate()
+    {
+        return $this->update;
+    }
 }

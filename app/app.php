@@ -46,14 +46,17 @@ $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
     foreach ($handle as $insight) {
         $item = unserialize($insight);
         if ($item->getTimestamp() == $timestamp) {
-            $json = $item->jsonSerialize();
-            $json['links'][] = [
-                'rel' => 'homepage',
-                'href' => '/homepage/',
-            ];
+            $response = BricksResponse::createEmpty()
+                ->withKeyValue('shop', $item->getShop())
+                ->withKeyValue('set', $item->getSet())
+                ->withKeyValue('value', $item->getValue())
+                ->withKeyValue('update', $item->getUpdate())
+                ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
+                ->withLink(['rel' => 'self', 'href' => '/shop/' . $item->getShop()])
+            ;
 
             return new Response(
-                json_encode($json),
+                json_encode($response->asArray()),
                 200
             );
         }
@@ -114,7 +117,8 @@ $app->get('/api/v1/set/{code}', function ($code) use ($app) {
                 ->withKeyValue('update', $item->getUpdate())
                 ->withLink(['rel' => 'self', 'href' => '/set/' . $item->getCode()])
                 ->withLink(['rel' => 'homepage', 'href' => '/homepage/'])
-                ->withLink(['rel' => 'collection', 'href' => '/sets/']);
+                ->withLink(['rel' => 'collection', 'href' => '/sets/'])
+            ;
 
             return new Response(
                 json_encode($response->asArray()),
@@ -173,18 +177,9 @@ $app->get('/api/v1/insights/', function () use ($app) {
         foreach ($handle as $set) {
             $item = unserialize($set);
             $insights[] = $item->jsonSerialize();
-            $links[] = [
-                'rel' => 'set ' . $item->getSet(),
-                'href' => '/set/' . $item->getSet()
-            ];
-            $links[] = [
-                'rel' => 'set ' . $item->getShop(),
-                'href' => '/shop/' . $item->getShop()
-            ];
-            $links[] = [
-                'rel' => 'insight ' . $item->getTimestamp(),
-                'href' => '/insight/' . $item->getTimestamp()
-            ];
+            $links[] = ['rel' => 'set ' . $item->getSet(), 'href' => '/set/' . $item->getSet()];
+            $links[] = ['rel' => 'set ' . $item->getShop(), 'href' => '/shop/' . $item->getShop()];
+            $links[] = ['rel' => 'insight ' . $item->getTimestamp(), 'href' => '/insight/' . $item->getTimestamp()];
         }
     }
 
@@ -210,10 +205,7 @@ $app->get('/api/v1/shops/', function () use ($app) {
         foreach ($handle as $set) {
             $item = unserialize($set);
             $shops[] = $item->jsonSerialize();
-            $links[] = [
-                'rel' => 'shop ' . $item->getSlug(),
-                'href' => '/shop/' . $item->getSlug()
-            ];
+            $links[] = ['rel' => 'shop ' . $item->getSlug(), 'href' => '/shop/' . $item->getSlug()];
         }
     }
 
