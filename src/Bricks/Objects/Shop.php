@@ -7,7 +7,7 @@ use JsonSerializable;
 
 final class Shop
     extends ValueObject
-    implements JsonSerializable
+    implements JsonSerializable, ObjectInterface
 {
     public static function mandatory()
     {
@@ -43,5 +43,15 @@ final class Shop
         return strtolower(
             str_replace(' ', '-', $this->get('name'))
         );
+    }
+
+    public function getCollectionUri()
+    {
+        return '/shops/';
+    }
+
+    public function getselfuri()
+    {
+        return '/shop/' . $this->getSlug();
     }
 }

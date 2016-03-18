@@ -2,9 +2,7 @@
 
 namespace Bricks\Factories;
 
-use Bricks\Objects\Insight;
-use Bricks\Objects\Set;
-use Bricks\Objects\Shop;
+use Bricks\Objects\ObjectInterface;
 use Bricks\Response\Response;
 
 /** @todo inject a service that count resources */
@@ -34,43 +32,17 @@ class ResponseFactory
             ->withLink('self', '/stats/');
     }
 
-    public function getInsight(Insight $item)
+    public function getObject(ObjectInterface $item)
     {
-        return $this->getEmptyResponse()
-            ->withKeyValue('shop', $item->get('shop'))
-            ->withKeyValue('set', $item->get('set'))
-            ->withKeyValue('value', $item->get('value'))
-            ->withKeyValue('update', $item->get('update'))
+        $response = $this->getEmptyResponse()
+            ->withLink('self', $item->getSelfUri())
+            ->withLink('collection', $item->getCollectionUri());
 
-            ->withLink('self', '/insight/' . $item->getTimestamp())
-            ->withLink('collection', '/insights/')
-        ;
-    }
+        foreach ($item->jsonSerialize() as $propertyKey => $value) {
+            $response = $response->withKeyValue($propertyKey, $value);
+        }
 
-    public function getSet(Set $item)
-    {
-        return $this->getEmptyResponse()
-            ->withKeyValue('code', $item->get('code'))
-            ->withKeyValue('update', $item->get('update'))
-            ->withKeyValue('pieces', $item->get('pieces'))
-            ->withKeyValue('name', $item->get('name'))
-
-            ->withLink('self', '/set/' . $item->get('code'))
-            ->withLink('collection', '/sets/')
-        ;
-    }
-
-    public function getShop(Shop $item)
-    {
-        return $this->getEmptyResponse()
-            ->withKeyValue('name', $item->get('name'))
-            ->withKeyValue('slug', $item->getSlug())
-            ->withKeyValue('address', $item->get('address'))
-            ->withKeyValue('update', $item->get('update'))
-
-            ->withLink('self', '/insight/' . $item->get('update')->getTimestamp())
-            ->withLink('collection', '/insights/')
-        ;
+        return $response;
     }
 
     public function getCollection($link, $collection, $links)

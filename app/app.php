@@ -38,7 +38,7 @@ $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
     foreach ($insightCollection as $insightItem) {
         $insight = unserialize($insightItem);
         if ($insight->getTimestamp() == $timestamp) {
-            $json = $app['response']->getInsight($insight);
+            $json = $app['response']->getObject($insight);
             return new JsonResponse($json->asArray(), 200);
         }
     }
@@ -53,11 +53,11 @@ $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
 
 $app->get('/api/v1/shop/{slug}', function ($slug) use ($app) {
     /** @todo move this path outside from here */
-    $handle = file('app/data/bricks.objects.shop');
-    foreach ($handle as $shop) {
-        $item = unserialize($shop);
-        if ($item->getSlug() == $slug) {
-            $json = $app['response']->getShop($item);
+    $allShops = file('app/data/bricks.objects.shop');
+    foreach ($allShops as $shopItem) {
+        $shop = unserialize($shopItem);
+        if ($shop->getSlug() == $slug) {
+            $json = $app['response']->getObject($shop);
             return new JsonResponse($json->asArray(), 200);
         }
     }
@@ -75,7 +75,7 @@ $app->get('/api/v1/set/{code}', function ($code) use ($app) {
     foreach ($handle as $set) {
         $item = unserialize($set);
         if ($item->get('code') == $code) {
-            $json = $app['response']->getSet($item);
+            $json = $app['response']->getObject($item);
             return new JsonResponse($json->asArray(), 200);
         }
     }

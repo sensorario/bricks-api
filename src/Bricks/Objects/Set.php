@@ -7,7 +7,7 @@ use JsonSerializable;
 
 final class Set
     extends ValueObject
-    implements JsonSerializable
+    implements JsonSerializable, ObjectInterface
 {
     public static function mandatory()
     {
@@ -37,5 +37,15 @@ final class Set
                 'object' => 'DateTime'
             ]
         ];
+    }
+
+    public function getCollectionUri()
+    {
+        return '/sets/';
+    }
+
+    public function getselfuri()
+    {
+        return '/set/' . $this->get('code');
     }
 }

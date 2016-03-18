@@ -7,7 +7,7 @@ use JsonSerializable;
 
 final class Insight
     extends ValueObject
-    implements JsonSerializable
+    implements JsonSerializable, ObjectInterface
 {
     public static function mandatory()
     {
@@ -42,5 +42,15 @@ final class Insight
     public function getTimestamp()
     {
         return $this->get('update')->getTimestamp();
+    }
+
+    public function getCollectionUri()
+    {
+        return '/insights/';
+    }
+
+    public function getselfuri()
+    {
+        return '/insight/' . $this->getTimestamp();
     }
 }
