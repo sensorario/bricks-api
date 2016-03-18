@@ -104,7 +104,7 @@ $app->get('/api/v1/sets/', function () use ($app) {
         }
     }
 
-    $json = $app['response']->getLegoSets($sets, $links);
+    $json = $app['response']->getCollection('/sets/', $sets, $links);
     return new JsonResponse($json->asArray(), 200);
 });
 
@@ -125,7 +125,7 @@ $app->get('/api/v1/insights/', function () use ($app) {
         }
     }
 
-    $json = $app['response']->getInsightCollection($insights, $links);
+    $json = $app['response']->getCollection('/insights/', $insights, $links);
     return new JsonResponse($json->asArray(), 200);
 });
 
@@ -142,7 +142,7 @@ $app->get('/api/v1/shops/', function () use ($app) {
         }
     }
 
-    $json = $app['response']->getShops($shops, $links);
+    $json = $app['response']->getCollection('/shops/', $shops, $links);
     return new JsonResponse($json->asArray(), 200);
 });
 

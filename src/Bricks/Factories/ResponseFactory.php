@@ -12,80 +12,62 @@ class ResponseFactory
 {
     public function getStatistics()
     {
-        return Response::createEmpty()
-            ->withKeyValue('sets', count(file('app/data/bricks.set')))
-            ->withKeyValue('insights', count(file('app/data/bricks.insight')))
-            ->withKeyValue('shops', count(file('app/data/bricks.shop')))
-            ->withLink('homepage', '/homepage/')
+        return $this->getEmptyResponse()
+            ->withKeyValue('sets', count(file('app/data/bricks.objects.set')))
+            ->withKeyValue('insights', count(file('app/data/bricks.objects.insight')))
+            ->withKeyValue('shops', count(file('app/data/bricks.objects.shop')))
             ->withLink('self', '/stats/');
+    }
+
+    private function getEmptyResponse()
+    {
+        return Response::createEmpty()
+            ->withLink('homepage', '/homepage/');
     }
 
     public function getInsight(Insight $insight)
     {
-        return Response::createEmpty()
+        return $this->getEmptyResponse()
             ->withKeyValue('shop', $insight->getShop())
             ->withKeyValue('set', $insight->getSet())
             ->withKeyValue('value', $insight->getValue())
             ->withKeyValue('update', $insight->getUpdate())
-            ->withLink('homepage', '/homepage/')
             ->withLink('self', '/shop/' . $insight->getShop());
     }
 
     public function getHomepage()
     {
-        return Response::createEmpty()
-            ->withLink('homepage', '/homepage/')
+        return $this->getEmptyResponse()
             ->withLink('sets', '/sets/')
             ->withLink('shops', '/shops/')
             ->withLink('insights', '/insights/')
             ->withLink('stats', '/stats/');
     }
 
-    public function getLegoSets($sets, $links)
-    {
-        return Response::createEmpty()
-            ->withKeyValue('collection', $sets)
-            ->withKeyValue('links', $links)
-            ->withLink('homepage', '/homepage/')
-            ->withLink('collection', '/sets/');
-    }
-
     public function getSet(Set $item)
     {
-        return Response::createEmpty()
+        return $this->getEmptyResponse()
             ->withKeyValue('code', $item->getCode())
             ->withKeyValue('update', $item->getUpdate())
             ->withLink('self', '/set/' . $item->getCode())
-            ->withLink('homepage', '/homepage/')
             ->withLink('collection', '/sets/');
     }
 
-    public function getInsightCollection($insights, $links)
+    public function getCollection($link, $collection, $links)
     {
-        return Response::createEmpty()
-            ->withKeyValue('collection', $insights)
+        return $this->getEmptyResponse()
+            ->withKeyValue('collection', $collection)
             ->withKeyValue('links', $links)
-            ->withLink('homepage', '/homepage/')
-            ->withLink('collection', '/insights/');
-    }
-
-    public function getShops($shops, $links)
-    {
-        return Response::createEmpty()
-            ->withKeyValue('collection', $shops)
-            ->withKeyValue('links', $links)
-            ->withLink('homepage', '/homepage/')
-            ->withLink('collection', '/shops/');
+            ->withLink('collection', $link);
     }
 
     public function getShop(Shop $item)
     {
-        return Response::createEmpty()
+        return $this->getEmptyResponse()
             ->withKeyValue('name', $item->getName())
             ->withKeyValue('slug', $item->getSlug())
             ->withKeyValue('address', $item->getAddress())
             ->withKeyValue('update', $item->getUpdate())
-            ->withLink('homepage', '/homepage/')
             ->withLink('self', '/shop/' . $item->getSlug());
     }
 }
