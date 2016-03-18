@@ -42,13 +42,6 @@ final class Shop implements JsonSerializable
             'address' => $this->address,
             'update' => $this->update->setTimeZone(new DateTimeZone('UTC')),
             'slug' => $this->slug,
-            'links' => [[
-                'rel' => 'self',
-                'href' => 'http://localhost:8080/api/v1/shop/' . $this->slug,
-            ],[
-                'rel' => 'collection',
-                'href' => 'http://localhost:8080/api/v1/shops/',
-            ],],
         ];
     }
 
@@ -60,5 +53,15 @@ final class Shop implements JsonSerializable
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getUpdate()
+    {
+        return $this->update;
     }
 }

@@ -18,19 +18,28 @@ final class Response
 
     public function withKeyValue($key, $value)
     {
+        if ($key == 'links') {
+            foreach ($value as $link) {
+                $newObject = $this->withLink($link);
+            }
+
+            return $newObject;
+        }
+
         return new self(array_merge(
             $this->properties,
             [$key => $value]
         ));
     }
 
-    public function withLink($link)
+    public function withLink($route)
     {
         $newProperties = $this->properties;
+        $route['href'] = 'http://localhost:8080/api/v1' . $route['href'];
         if (isset($newProperties['links'])) {
-            $newProperties['links'][] = $link;
+            $newProperties['links'][] = $route;
         } else {
-            $newProperties['links'] = [$link];
+            $newProperties['links'] = [$route];
         }
 
         return new self(

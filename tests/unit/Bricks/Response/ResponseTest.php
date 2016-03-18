@@ -48,13 +48,16 @@ final class ResponseTest extends PHPUnit_Framework_TestCase
 
         $linkToAdd = [
             'rel' => 'self',
-            'href' => 'http://localhost:8080/api/v1/foo/'
+            'href' => '/foo/'
         ];
 
         $expectedArray = [
             'foo' => 'bar',
             'bar' => 'foo',
-            'links' => [$linkToAdd],
+            'links' => [[
+                'rel' => $linkToAdd['rel'],
+                'href' => 'http://localhost:8080/api/v1' . $linkToAdd['href'],
+            ]],
         ];
 
         $newResponse = $newResponse->withLink($linkToAdd);
@@ -72,17 +75,22 @@ final class ResponseTest extends PHPUnit_Framework_TestCase
 
         $linkToAdd = [
             'rel' => 'self',
-            'href' => 'http://localhost:8080/api/v1/foo/'
+            'href' => '/foo/'
         ];
 
         $expectedArray = [
             'foo' => 'bar',
             'bar' => 'foo',
-            'links' => [
-                $linkToAdd,
-                $linkToAdd,
-                $linkToAdd,
-            ],
+            'links' => [[
+                'rel' => $linkToAdd['rel'],
+                'href' => 'http://localhost:8080/api/v1' . $linkToAdd['href'],
+            ],[
+                'rel' => $linkToAdd['rel'],
+                'href' => 'http://localhost:8080/api/v1' . $linkToAdd['href'],
+            ],[
+                'rel' => $linkToAdd['rel'],
+                'href' => 'http://localhost:8080/api/v1' . $linkToAdd['href'],
+            ]],
         ];
 
         $newResponse = $newResponse->withLink($linkToAdd);
