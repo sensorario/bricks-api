@@ -1,0 +1,12 @@
+default:
+  suites:
+    default:
+      path: %paths.base%/features
+      contexts: [Behat\MinkExtension\Context\MinkContext]
+  extensions:
+    Behat\MinkExtension:
+      show_cmd: firefox %s
+      base_url: http://localhost:8080/api/v1
+      sessions:
+        default:
+          goutte: ~
