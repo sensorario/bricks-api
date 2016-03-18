@@ -2,66 +2,46 @@
 
 namespace Bricks\Objects;
 
-use DateTime;
-use DateTimeZone;
+use Sensorario\ValueObject\ValueObject;
 use JsonSerializable;
-use Symfony\Component\HttpFoundation\Request;
 
-final class Shop implements JsonSerializable
+final class Shop
+    extends ValueObject
+    implements JsonSerializable
 {
-    private $name;
-
-    private $address;
-
-    private $slug;
-
-    private $update;
-
-    private function __construct(array $properties)
+    public static function mandatory()
     {
-        $this->name = $properties['name'];
-        $this->address = $properties['address'];
-        $this->update = new DateTime('now');
-        $this->slug = strtolower(
-            str_replace(' ', '-', $this->name)
-        );
-    }
-
-    public static function fromRequest(Request $request)
-    {
-        return new self([
-            'name' => $request->request->get('name'),
-            'address' => $request->request->get('address'),
-        ]);
+        return [
+            'name',
+            'address',
+            'update',
+        ];
     }
 
     public function jsonSerialize()
     {
         return [
-            'name' => $this->name,
-            'address' => $this->address,
-            'update' => $this->update->setTimeZone(new DateTimeZone('UTC')),
-            'slug' => $this->slug,
+            'name' => $this->get('name'),
+            'address' => $this->get('address'),
+            'slug' => $this->getSlug(),
+            'update' => $this->get('update')
+                ->setTimeZone(new \DateTimeZone('UTC')),
         ];
     }
 
-    public function getAddress()
+    public static function rules()
     {
-        return $this->address;
+        return [
+            'update' => [
+                'object' => 'DateTime'
+            ]
+        ];
     }
 
     public function getSlug()
     {
-        return $this->slug;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function getUpdate()
-    {
-        return $this->update;
+        return strtolower(
+            str_replace(' ', '-', $this->get('name'))
+        );
     }
 }

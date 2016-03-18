@@ -117,12 +117,12 @@ $app->get('/api/v1/insights/', function () use ($app) {
     if (file_exists('app/data/bricks.objects.insight')) {
         $handle = file('app/data/bricks.objects.insight');
         foreach ($handle as $set) {
-            $item = unserialize($set);
-            $insights[] = $item->jsonSerialize();
+            $insight = unserialize($set);
+            $insights[] = $insight->jsonSerialize();
             /** @todo introduce LinkValue Object */
-            $links[] = ['rel' => 'set ' . $item->getSet(), 'href' => '/set/' . $item->getSet()];
-            $links[] = ['rel' => 'set ' . $item->getShop(), 'href' => '/shop/' . $item->getShop()];
-            $links[] = ['rel' => 'insight ' . $item->getTimestamp(), 'href' => '/insight/' . $item->getTimestamp()];
+            $links[] = ['rel' => 'set ' . $insight->get('set'), 'href' => '/set/' . $insight->get('set')];
+            $links[] = ['rel' => 'set ' . $insight->get('shop'), 'href' => '/shop/' . $insight->get('shop')];
+            $links[] = ['rel' => 'insight ' . $insight->getTimestamp(), 'href' => '/insight/' . $insight->getTimestamp()];
         }
     }
 
@@ -178,17 +178,22 @@ $app->post('/api/v1/shop/', function (Request $request) use ($app) {
         $handle = file('app/data/bricks.objects.shop');
         foreach ($handle as $set) {
             $item = unserialize($set);
-            if ($item->getAddress() == $request->request->get('address')) {
+            if ($item->get('address') == $request->request->get('address')) {
                 return new JsonResponse([
                     'status' => 'error',
                     'code' => 409,
-                    'message' => 'Set ' . $item->getCode() . ' already exists',
+                    'message' => 'Set ' . $item->get('code') . ' already exists',
                 ], 409);
             }
         }
     }
 
-    $shop = Shop::fromRequest($request);
+    $shop = Shop::box([
+        'name' => $request->request->get('name'),
+        'address' => $request->request->get('address'),
+        'update' => new \DateTime('now'),
+    ]);
+
     Persist::jsonSerializable($shop);
     $shopAsArray = $shop->jsonSerialize();
 
@@ -196,7 +201,13 @@ $app->post('/api/v1/shop/', function (Request $request) use ($app) {
 });
 
 $app->post('/api/v1/insight/', function (Request $request) use ($app) {
-    $insight = Insight::fromRequest($request);
+    $insight = Insight::box([
+        'shop' => $request->request->get('shop'),
+        'set' => $request->request->get('set'),
+        'value' => $request->request->get('value'),
+        'update' => new \DateTime('now'),
+    ]);
+
     Persist::jsonSerializable($insight);
     $insihtAsArray = $insight->jsonSerialize();
 

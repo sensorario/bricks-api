@@ -13,6 +13,8 @@ final class Persist
             str_replace('\\', '.', get_class($json))
         );
 
+        error_log($fileName);
+
         $content = serialize($json);
         $newLine = file_exists($fileName) ? "\n" : "";
         $handle = fopen($fileName, 'a+');

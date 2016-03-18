@@ -2,70 +2,45 @@
 
 namespace Bricks\Objects;
 
-use DateTime;
-use DateTimeZone;
+use Sensorario\ValueObject\ValueObject;
 use JsonSerializable;
-use Symfony\Component\HttpFoundation\Request;
 
-final class Insight implements JsonSerializable
+final class Insight
+    extends ValueObject
+    implements JsonSerializable
 {
-    private $shop;
-
-    private $set;
-
-    private $value;
-
-    private $update;
-
-    private function __construct(array $properties)
+    public static function mandatory()
     {
-        $this->shop = $properties['shop'];
-        $this->set = $properties['set'];
-        $this->value = $properties['value'];
-        $this->update = new DateTime('now');
-    }
-
-    public static function fromRequest(Request $request)
-    {
-        return new self([
-            'shop' => $request->request->get('shop'),
-            'set' => $request->request->get('set'),
-            'value' => $request->request->get('value'),
-        ]);
+        return [
+            'shop',
+            'set',
+            'value',
+            'update',
+        ];
     }
 
     public function jsonSerialize()
     {
         return [
-            'shop' => $this->shop,
-            'set' => $this->set,
-            'value' => $this->value,
-            'update' => $this->update->setTimeZone(new DateTimeZone('UTC')),
+            'shop' => $this->get('shop'),
+            'set' => $this->get('set'),
+            'value' => $this->get('value'),
+            'update' => $this->get('update')
+                ->setTimeZone(new \DateTimeZone('UTC')),
+        ];
+    }
+
+    public static function rules()
+    {
+        return [
+            'update' => [
+                'object' => 'DateTime'
+            ]
         ];
     }
 
     public function getTimestamp()
     {
-        return $this->update->getTimestamp();
-    }
-
-    public function getSet()
-    {
-        return $this->set;
-    }
-
-    public function getShop()
-    {
-        return $this->shop;
-    }
-
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    public function getUpdate()
-    {
-        return $this->update;
+        return $this->get('update')->getTimestamp();
     }
 }

@@ -34,13 +34,13 @@ class ResponseFactory
             ->withLink('self', '/stats/');
     }
 
-    public function getInsight(Insight $insight)
+    public function getInsight(Insight $item)
     {
         return $this->getEmptyResponse()
-            ->withKeyValue('shop', $insight->getShop())
-            ->withKeyValue('set', $insight->getSet())
-            ->withKeyValue('value', $insight->getValue())
-            ->withKeyValue('update', $insight->getUpdate())
+            ->withKeyValue('shop', $item->get('shop'))
+            ->withKeyValue('set', $item->get('set'))
+            ->withKeyValue('value', $item->get('value'))
+            ->withKeyValue('update', $item->get('update'))
 
             ->withLink('self', '/insight/' . $item->getTimestamp())
             ->withLink('collection', '/insights/')
@@ -61,12 +61,12 @@ class ResponseFactory
     public function getShop(Shop $item)
     {
         return $this->getEmptyResponse()
-            ->withKeyValue('name', $item->getName())
+            ->withKeyValue('name', $item->get('name'))
             ->withKeyValue('slug', $item->getSlug())
-            ->withKeyValue('address', $item->getAddress())
-            ->withKeyValue('update', $item->getUpdate())
+            ->withKeyValue('address', $item->get('address'))
+            ->withKeyValue('update', $item->get('update'))
 
-            ->withLink('self', '/insight/' . $item->getTimestamp())
+            ->withLink('self', '/insight/' . $item->get('update')->getTimestamp())
             ->withLink('collection', '/insights/')
         ;
     }
