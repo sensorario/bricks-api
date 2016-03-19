@@ -3,8 +3,8 @@
 use Bricks\Objects\Insight;
 use Bricks\Objects\Set;
 use Bricks\Objects\Shop;
-use Bricks\Persist;
 use Bricks\Response\ErrorResponse;
+use Bricks\Services\Persist;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +12,15 @@ use Symfony\Component\HttpFoundation\Response;
 require_once 'vendor/autoload.php';
 
 $app = new Silex\Application();
+$app['logger'] = function () {
+    $logger = new Monolog\Logger('bricks_logger');
+    return $logger->pushHandler(
+        new Monolog\Handler\StreamHandler(
+            __DIR__ . '/logs/my_app.log',
+            Monolog\Logger::WARNING
+        )
+    );
+};
 $app['response'] = function () {
     return new Bricks\Factories\ResponseFactory();
 };
@@ -162,15 +171,20 @@ $app->post('/api/v1/set/', function (Request $request) use ($app) {
         }
     }
 
-    $setValue = Set::box([
+    $setObject = Set::box([
         'code' => $request->request->get('code'),
         'name' => $request->request->get('name'),
         'pieces' => $request->request->get('pieces'),
         'update' => new \DateTime('now'),
     ]);
 
-    Persist::jsonSerializable($setValue);
-    $setAsArray = $setValue->jsonSerialize();
+    (new Persist(
+        $setObject,
+        new Bricks\Services\NamesGenerator(),
+        $app['logger']
+    ))->persist();
+
+    $setAsArray = $setObject->jsonSerialize();
 
     return new JsonResponse($setAsArray, 201);
 });
@@ -196,7 +210,12 @@ $app->post('/api/v1/shop/', function (Request $request) use ($app) {
         'update' => new \DateTime('now'),
     ]);
 
-    Persist::jsonSerializable($shop);
+    (new Persist(
+        $shop,
+        new Bricks\Services\NamesGenerator(),
+        $app['logger']
+    ))->persist();
+
     $shopAsArray = $shop->jsonSerialize();
 
     return new JsonResponse($shopAsArray, 201);
@@ -210,14 +229,20 @@ $app->post('/api/v1/insight/', function (Request $request) use ($app) {
         'update' => new \DateTime('now'),
     ]);
 
-    Persist::jsonSerializable($insight);
+    (new Persist(
+        $insight,
+        new Bricks\Services\NamesGenerator(),
+        $app['logger']
+    ))->persist();
+
     $insihtAsArray = $insight->jsonSerialize();
 
     return new JsonResponse($insihtAsArray, 201);
 });
 
-$app->error(function (\Exception $e) {
-    /** @todo add monolog to log exception message */
+$app->error(function (\Exception $e) use ($app) {
+    $app['logger']->warning($e->getMessage());
+    $app['logger']->warning($e->getTraceAsString());
     return new JsonResponse(
         ErrorResponse::withMessage('Invalid request')
             ->jsonSerialize(),

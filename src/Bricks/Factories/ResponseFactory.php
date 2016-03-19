@@ -28,6 +28,7 @@ class ResponseFactory
     /** @codeCoverageIgnore */
     public function getStatistics()
     {
+        /** @todo files must exists!!! */
         return $this->getBaseResponse()
             ->withKeyValue('sets', count(file('app/data/bricks.objects.set')))
             ->withKeyValue('insights', count(file('app/data/bricks.objects.insight')))
