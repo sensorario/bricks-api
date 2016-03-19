@@ -8,8 +8,8 @@ First of all, load fixtures, and then run server. This api run inside PHP built-
 
 
 ```bash
-./loadfixtures
-./runserver
+./bin/loadfixtures
+./bin/runserver
 ```
 
 ## php.ini configuration
