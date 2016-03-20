@@ -79,9 +79,26 @@ $app->get('/api/v1/shop/{slug}', function ($slug) use ($app) {
     ], 404);
 });
 
+$app->delete('/api/v1/set/{code}', function ($code) use ($app) {
+    $allSets = file('app/data/bricks.objects.set');
+    unlink('app/data/bricks.objects.set');
+    foreach ($allSets as $set) {
+        $item = unserialize($set);
+        if ($item->get('code') != $code) {
+            (new Persist(
+                $item,
+                new Bricks\Services\NamesGenerator(),
+                $app['logger']
+            ))->persist();
+        }
+    }
+
+    return new Response('', 204);
+});
+
 $app->get('/api/v1/set/{code}', function ($code) use ($app) {
-    $handle = file('app/data/bricks.objects.set');
-    foreach ($handle as $set) {
+    $allSets = file('app/data/bricks.objects.set');
+    foreach ($allSets as $set) {
         $item = unserialize($set);
         if ($item->get('code') == $code) {
             $json = $app['response']->getObject($item);

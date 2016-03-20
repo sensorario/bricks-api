@@ -6,39 +6,42 @@ rm app/data/bricks.objects.shop
 rm app/data/bricks.objects.insight
 
 # add sets
-curl -H "Content-Type: application/json" -X POST --data "{
+curl -vH "Content-Type: application/json" -X POST --data "{
     \"name\":\"Millenium falcon\",
     \"pieces\":\"1330\",
     \"code\":\"75105\"
 }" http://localhost:8080/api/v1/set/
 
-curl -H "Content-Type: application/json" -X POST --data "{
+curl -vH "Content-Type: application/json" -X POST --data "{
     \"name\":\"Ghostbuster\",
     \"pieces\":\"508\",
     \"code\":\"21108\"
 }" http://localhost:8080/api/v1/set/
 
-curl -H "Content-Type: application/json" -X POST --data "{
+curl -vH "Content-Type: application/json" -X POST --data "{
     \"name\":\"The Big Bang Theory\",
     \"pieces\":\"484\",
     \"code\":\"21320\"
 }" http://localhost:8080/api/v1/set/
 
-curl -H "Content-Type: application/json" -X POST --data "{
+curl -vH "Content-Type: application/json" -X POST --data "{
     \"name\":\"Iron Man Vs Ultron\",
     \"pieces\":\"92\",
     \"code\":\"76029\"
 }" http://localhost:8080/api/v1/set/
 
 # add shops
-curl -H "Content-Type: application/json" -X POST --data "{
+curl -vH "Content-Type: application/json" -X POST --data "{
     \"name\":\"Toys Center\",
     \"address\":\"Piazzale della Cooperazione, 4, 47122 Forlì FC\"
 }" http://localhost:8080/api/v1/shop/
 
 # all insights
-curl -H "Content-Type: application/json" -X POST --data "{
+curl -vH "Content-Type: application/json" -X POST --data "{
     \"shop\":\"toys-center\",
     \"set\":\"75105\",
     \"value\":\"15800\"
 }" http://localhost:8080/api/v1/insight/
+
+# Delete Ghostbuster Set
+curl -vX DELETE http://localhost:8080/api/v1/set/21108
