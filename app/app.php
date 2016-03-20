@@ -173,20 +173,22 @@ $app->get('/api/v1/shops/', function () use ($app) {
 
 $app->post('/api/v1/set/', function (Request $request) use ($app) {
     if (file_exists(Bricks\Files::RESOURCE_SET)) {
-        $handle = file(Bricks\Files::RESOURCE_SET);
-        foreach ($handle as $set) {
-            $item = unserialize($set);
-            if ($item->get('code') == $request->request->get('code')) {
+        $allSets = file(Bricks\Files::RESOURCE_SET);
+        foreach ($allSets as $setItem) {
+            $setValueObject = unserialize($setItem);
+            if ($setValueObject->get('code') == $request->request->get('code')) {
                 return new JsonResponse([
                     'status' => 'error',
                     'code' => 409,
-                    'message' => 'Set ' . $item->get('code') . ' already exists',
+                    'message' => 'Set ' . $setValueObject->get('code') . ' already exists',
                 ], 409);
             }
         }
     }
 
-    $setObject = Set::box([
+    $app['logger']->warning(var_export($request->request, true));
+
+    $setValueObject = Set::box([
         'code' => $request->request->get('code'),
         'name' => $request->request->get('name'),
         'pieces' => $request->request->get('pieces'),
@@ -194,12 +196,12 @@ $app->post('/api/v1/set/', function (Request $request) use ($app) {
     ]);
 
     (new Persist(
-        $setObject,
+        $setValueObject,
         new Bricks\Services\NamesGenerator(),
         $app['logger']
     ))->persist();
 
-    $setAsArray = $setObject->jsonSerialize();
+    $setAsArray = $setValueObject->jsonSerialize();
 
     return new JsonResponse($setAsArray, 201);
 });

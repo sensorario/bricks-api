@@ -39,11 +39,6 @@ final class PersistTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSavesNewLineEachTimeIsCalled()
-    {
-        $this->markTestIncomplete();
-    }
-
     public function testDeleteFile()
     {
         $this->markTestIncomplete();
