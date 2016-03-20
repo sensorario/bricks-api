@@ -24,6 +24,12 @@ curl -H "Content-Type: application/json" -X POST --data "{
     \"code\":\"21320\"
 }" http://localhost:8080/api/v1/set/
 
+curl -H "Content-Type: application/json" -X POST --data "{
+    \"name\":\"Iron Man Vs Ultron\",
+    \"pieces\":\"92\",
+    \"code\":\"76029\"
+}" http://localhost:8080/api/v1/set/
+
 # add shops
 curl -H "Content-Type: application/json" -X POST --data "{
     \"name\":\"Toys Center\",
