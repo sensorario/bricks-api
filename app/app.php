@@ -42,8 +42,7 @@ $app->get('/api/v1/stats/', function () use ($app) {
 });
 
 $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
-    /** @todo move outside this path */
-    $insightCollection = file('app/data/bricks.objects.insight');
+    $insightCollection = file(Bricks\Files::RESOURCE_INSIGHT);
     foreach ($insightCollection as $insightItem) {
         $insight = unserialize($insightItem);
         if ($insight->getTimestamp() == $timestamp) {
@@ -61,8 +60,7 @@ $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
 });
 
 $app->get('/api/v1/shop/{slug}', function ($slug) use ($app) {
-    /** @todo move this path outside from here */
-    $allShops = file('app/data/bricks.objects.shop');
+    $allShops = file(Bricks\Files::RESOURCE_SHOP);
     foreach ($allShops as $shopItem) {
         $shop = unserialize($shopItem);
         if ($shop->getSlug() == $slug) {
@@ -80,8 +78,8 @@ $app->get('/api/v1/shop/{slug}', function ($slug) use ($app) {
 });
 
 $app->delete('/api/v1/set/{code}', function ($code) use ($app) {
-    $allSets = file('app/data/bricks.objects.set');
-    unlink('app/data/bricks.objects.set');
+    $allSets = file(Bricks\Files::RESOURCE_SET);
+    unlink(Bricks\Files::RESOURCE_SET);
     foreach ($allSets as $set) {
         $item = unserialize($set);
         if ($item->get('code') != $code) {
@@ -97,7 +95,7 @@ $app->delete('/api/v1/set/{code}', function ($code) use ($app) {
 });
 
 $app->get('/api/v1/set/{code}', function ($code) use ($app) {
-    $allSets = file('app/data/bricks.objects.set');
+    $allSets = file(Bricks\Files::RESOURCE_SET);
     foreach ($allSets as $set) {
         $item = unserialize($set);
         if ($item->get('code') == $code) {
@@ -117,8 +115,8 @@ $app->get('/api/v1/sets/', function () use ($app) {
     $links = [];
 
     /** @todo move these paths outside from here */
-    if (file_exists('app/data/bricks.objects.set')) {
-        $handle = file('app/data/bricks.objects.set');
+    if (file_exists(Bricks\Files::RESOURCE_SET)) {
+        $handle = file(Bricks\Files::RESOURCE_SET);
         foreach ($handle as $set) {
             $item = unserialize($set);
             $sets[] = $item->jsonSerialize();
@@ -140,8 +138,8 @@ $app->get('/api/v1/insights/', function () use ($app) {
     $links = [];
 
     /** @todo move outsite path data responsibility */
-    if (file_exists('app/data/bricks.objects.insight')) {
-        $handle = file('app/data/bricks.objects.insight');
+    if (file_exists(Bricks\Files::RESOURCE_INSIGHT)) {
+        $handle = file(Bricks\Files::RESOURCE_INSIGHT);
         foreach ($handle as $set) {
             $insight = unserialize($set);
             $insights[] = $insight->jsonSerialize();
@@ -160,8 +158,8 @@ $app->get('/api/v1/shops/', function () use ($app) {
     $shops = [];
     $links = [];
 
-    if (file_exists('app/data/bricks.objects.shop')) {
-        $handle = file('app/data/bricks.objects.shop');
+    if (file_exists(Bricks\Files::RESOURCE_SHOP)) {
+        $handle = file(Bricks\Files::RESOURCE_SHOP);
         foreach ($handle as $set) {
             $item = unserialize($set);
             $shops[] = $item->jsonSerialize();
@@ -174,8 +172,8 @@ $app->get('/api/v1/shops/', function () use ($app) {
 });
 
 $app->post('/api/v1/set/', function (Request $request) use ($app) {
-    if (file_exists('app/data/bricks.objects.set')) {
-        $handle = file('app/data/bricks.objects.set');
+    if (file_exists(Bricks\Files::RESOURCE_SET)) {
+        $handle = file(Bricks\Files::RESOURCE_SET);
         foreach ($handle as $set) {
             $item = unserialize($set);
             if ($item->get('code') == $request->request->get('code')) {
@@ -207,8 +205,8 @@ $app->post('/api/v1/set/', function (Request $request) use ($app) {
 });
 
 $app->post('/api/v1/shop/', function (Request $request) use ($app) {
-    if (file_exists('app/data/bricks.objects.shop')) {
-        $handle = file('app/data/bricks.objects.shop');
+    if (file_exists(Bricks\Files::RESOURCE_SHOP)) {
+        $handle = file(Bricks\Files::RESOURCE_SHOP);
         foreach ($handle as $set) {
             $item = unserialize($set);
             if ($item->get('address') == $request->request->get('address')) {

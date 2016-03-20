@@ -8,7 +8,6 @@ use Silex\WebTestCase;
 
 class SetCreationTest extends WebTestCase
 {
-    /** @todo move this in a BrickWebTestCase */
     public function createApplication()
     {
         return require __DIR__ . '/../../app/app.php';
@@ -24,7 +23,6 @@ class SetCreationTest extends WebTestCase
             'pieces' => '7',
         ];
 
-        /** @todo move this in a BrickWebTestCase */
         $this->client = $this->createClient();
     }
 
