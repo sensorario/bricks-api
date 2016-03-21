@@ -8,6 +8,13 @@ use Bricks\Response\Response;
 class ResponseFactory
 {
     /** @codeCoverageIgnore */
+    public function getBaseResponse()
+    {
+        return Response::createEmpty()
+            ->withLink('homepage', '/homepage/');
+    }
+
+    /** @codeCoverageIgnore */
     public function getHomepage()
     {
         return $this->getBaseResponse()
@@ -15,13 +22,6 @@ class ResponseFactory
             ->withLink('shops', '/shops/')
             ->withLink('insights', '/insights/')
             ->withLink('stats', '/stats/');
-    }
-
-    /** @codeCoverageIgnore */
-    public function getBaseResponse()
-    {
-        return Response::createEmpty()
-            ->withLink('homepage', '/homepage/');
     }
 
     /** @codeCoverageIgnore */
