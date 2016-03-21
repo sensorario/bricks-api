@@ -22,7 +22,7 @@ $app['logger'] = function () {
     );
 };
 $app['response'] = function () {
-    return new Bricks\Factories\ResponseFactory();
+    return new Bricks\Response\ResponseFactory();
 };
 
 $app->before(function (Request $request) {

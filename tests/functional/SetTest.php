@@ -19,7 +19,7 @@ class SetCreationTest extends WebTestCase
         parent::setUp();
 
         $this->set = [
-            'code' => rand(11111111111111111111111111, 99999999999999999999999999),
+            'code' => 'fake' . rand(11111111111111111111111111, 99999999999999999999999999),
             'name' => 'foo',
             'pieces' => '7',
         ];
@@ -65,5 +65,16 @@ class SetCreationTest extends WebTestCase
             $recordStoredUntilNow + 1,
             count(file($this->fileName))
         );
+    }
+
+    public function testAllSetsAreShownViaGetRequest()
+    {
+        $this->client->request(
+            'GET',
+            'http://localhost::8080/api/v1/sets/', 
+            $this->set
+        );
+
+        print_r(json_encode($this->client->getResponse()->getContent());
     }
 }

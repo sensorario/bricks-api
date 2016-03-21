@@ -1,6 +1,6 @@
 <?php
 
-namespace Bricks\Factories;
+namespace Bricks\Response;
 
 use PHPUnit_Framework_TestCase;
 

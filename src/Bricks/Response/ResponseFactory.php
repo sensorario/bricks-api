@@ -1,6 +1,6 @@
 <?php
 
-namespace Bricks\Factories;
+namespace Bricks\Response;
 
 use Bricks\Objects\ObjectInterface;
 use Bricks\Response\Response;
