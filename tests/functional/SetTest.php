@@ -69,12 +69,24 @@ class SetCreationTest extends WebTestCase
 
     public function testAllSetsAreShownViaGetRequest()
     {
+        $numberOfSets = count(file($this->fileName));
+
         $this->client->request(
             'GET',
-            'http://localhost::8080/api/v1/sets/', 
-            $this->set
+            'http://localhost::8080/api/v1/sets/'
         );
 
-        print_r(json_encode($this->client->getResponse()->getContent());
+        $json = json_decode(
+            $this->client->getResponse()->getContent()
+        );
+
+        foreach ($json as $key => $item) {
+            if ($key == 'collection') {
+                $this->assertEquals(
+                    $numberOfSets,
+                    count($item)
+                );
+            }
+        }
     }
 }
