@@ -1,9 +1,27 @@
 # bricks-api
 
+ - clone project
+ - install vendors
+
 ```bash
-./bin/loadfixtures
+git clone git@github.com:sensorario/bricks-api
+cd bricks-api
+php composer.phar install
+```
+
+ - run server
+
+```bash
 ./bin/runserver
 ```
+
+ - load fixtures
+
+```bash
+./bin/loadfixtures
+```
+
+- open http://localhost:8080/api/v1/homepage
 
 ## php.ini configuration
 
