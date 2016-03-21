@@ -89,4 +89,29 @@ class SetCreationTest extends WebTestCase
             }
         }
     }
+
+    /** @dataProvider getResources */
+    public function testAllPublicResourceAvailability($resource)
+    {
+        $this->client->request(
+            'GET',
+            $path = 'http://localhost::8080/api/v1/' . $resource . '/'
+        );
+
+        $this->assertEquals(
+            200,
+            $this->client->getResponse()->getStatusCode()
+        );
+    }
+
+    public function getResources()
+    {
+        return [
+            ['sets'],
+            ['homepage'],
+            ['shops'],
+            ['insights'],
+            ['stats'],
+        ];
+    }
 }
