@@ -21,7 +21,7 @@ php composer.phar install
 ./bin/loadfixtures
 ```
 
-- open http://localhost:8080/api/v1/homepage
+- open http://localhost:8080/api/v1/homepage/
 
 ## php.ini configuration
 
