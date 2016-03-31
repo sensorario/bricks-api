@@ -12,13 +12,14 @@ final class Persist
 
     private $logger;
 
+    private $object;
+
     public function __construct(
         ObjectInterface $object,
         NamesGenerator $namesGenerator,
         LoggerInterface $logger
     ) {
-        $this->fileName = $namesGenerator
-            ->generateName($this->object = $object);
+        $this->fileName = $namesGenerator->generateName($this->object = $object);
         $this->logger = $logger;
     }
 
