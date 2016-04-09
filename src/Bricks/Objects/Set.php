@@ -39,13 +39,11 @@ final class Set
         ];
     }
 
-    /** @codeCoverageIgnore */
     public function getCollectionUri()
     {
         return '/sets/';
     }
 
-    /** @codeCoverageIgnore */
     public function getSelfUri()
     {
         return '/set/' . $this->get('code');

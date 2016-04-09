@@ -39,19 +39,16 @@ final class Insight
         ];
     }
 
-    /** @codeCoverageIgnore */
     public function getTimestamp()
     {
         return $this->get('update')->getTimestamp();
     }
 
-    /** @codeCoverageIgnore */
     public function getCollectionUri()
     {
         return '/insights/';
     }
 
-    /** @codeCoverageIgnore */
     public function getselfuri()
     {
         return '/insight/' . $this->getTimestamp();

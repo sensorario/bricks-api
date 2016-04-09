@@ -5,7 +5,6 @@ namespace Bricks\Objects;
 use Sensorario\ValueObject\ValueObject;
 use JsonSerializable;
 
-/** @codeCoverageIgnore */
 final class Shop
     extends ValueObject
     implements ObjectInterface

@@ -8,6 +8,8 @@ final class PersistTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        @unlink($this->persist->getFileName());
+
         $this->loggerInterface = $this
             ->getMock('Psr\Log\LoggerInterface');
 
@@ -22,7 +24,7 @@ final class PersistTest extends PHPUnit_Framework_TestCase
         $this->namesGenerator->expects($this->once())
             ->method('generateName')
             ->with($this->objectInterface)
-            ->will($this->returnValue(__DIR__ . '/../../../../bricks.objects.objectinterface'));
+            ->will($this->returnValue(__DIR__ . '/../../../../app/data/bricks.objects.objectinterface'));
 
         $this->persist = new Persist(
             $this->objectInterface,
@@ -34,7 +36,7 @@ final class PersistTest extends PHPUnit_Framework_TestCase
     public function testFileNameIsBasedOnObjectClassName()
     {
         $this->assertEquals(
-            __DIR__ . '/../../../../bricks.objects.objectinterface',
+            __DIR__ . '/../../../../app/data/bricks.objects.objectinterface',
             $this->persist->getFileName()
         );
     }
@@ -44,9 +46,15 @@ final class PersistTest extends PHPUnit_Framework_TestCase
         $this->markTestIncomplete();
     }
 
-    public function testCreateFileIfNotExists()
+    public function testPersistDataInsideAppDataFolder()
     {
-        $this->markTestIncomplete();
+        $this->persist->persist();
+
+        $this->assertTrue(
+            file_exists(
+                $this->persist->getFileName()
+            )
+        );
     }
 
     public function testSaveObjectSerializationInsideTheFile()
@@ -57,5 +65,10 @@ final class PersistTest extends PHPUnit_Framework_TestCase
     public function testTotalRecordCountZeroWhenFileDoesNotExists()
     {
         $this->markTestIncomplete();
+    }
+
+    public function tearDown()
+    {
+        @unlink($this->persist->getFileName());
     }
 } 

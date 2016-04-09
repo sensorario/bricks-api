@@ -7,14 +7,12 @@ use Bricks\Response\Response;
 
 class ResponseFactory
 {
-    /** @codeCoverageIgnore */
     public function getBaseResponse()
     {
         return Response::createEmpty()
             ->withLink('homepage', '/homepage/');
     }
 
-    /** @codeCoverageIgnore */
     public function getHomepage()
     {
         return $this->getBaseResponse()
@@ -24,7 +22,6 @@ class ResponseFactory
             ->withLink('stats', '/stats/');
     }
 
-    /** @codeCoverageIgnore */
     public function getStatistics()
     {
         return $this->getBaseResponse()
@@ -47,7 +44,6 @@ class ResponseFactory
         return $response;
     }
 
-    /** @codeCoverageIgnore */
     public function getCollection($link, $collection, $links)
     {
         return $this->getBaseResponse()

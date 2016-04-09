@@ -28,7 +28,6 @@ final class Persist
         return $this->fileName;
     }
 
-    /** @codeCoverageIgnore */
     public function persist()
     {
         $content = serialize($this->object);
