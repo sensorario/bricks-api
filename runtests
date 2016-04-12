@@ -1,4 +1,4 @@
 #!/bin/bash
-./bin/phpunit --coverage-html=tmp
+./bin/phpunit --stop-on-failure
 echo
 ./bin/behat --format=progress
