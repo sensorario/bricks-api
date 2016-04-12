@@ -1,6 +1,6 @@
 <?php
 
-namespace Bricks\Objects;
+namespace Bricks\Objects\Interfaces;
 
 interface ObjectInterface
     extends \JsonSerializable

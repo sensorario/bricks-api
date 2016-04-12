@@ -2,8 +2,9 @@
 
 namespace Bricks\Objects;
 
-use Sensorario\ValueObject\ValueObject;
+use Bricks\Objects\Interfaces\ObjectInterface;
 use JsonSerializable;
+use Sensorario\ValueObject\ValueObject;
 
 final class Set
     extends ValueObject
