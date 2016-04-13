@@ -267,4 +267,12 @@ $app->error(function (\Exception $e) use ($app) {
     );
 });
 
+$app->get('/api/v1/resources/', function (Request $request) use ($app) {
+
+    return new JsonResponse(
+        $app['routes']->getIterator(),
+        200
+    );
+});
+
 return $app;
