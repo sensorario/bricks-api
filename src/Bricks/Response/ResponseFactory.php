@@ -2,7 +2,7 @@
 
 namespace Bricks\Response;
 
-use Bricks\Objects\ObjectInterface;
+use Bricks\Objects\Interfaces\ObjectInterface;
 use Bricks\Response\Response;
 
 class ResponseFactory
