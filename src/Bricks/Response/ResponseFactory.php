@@ -31,11 +31,23 @@ class ResponseFactory
             ->withLink('self', '/stats/');
     }
 
+    public function getCollectionUri(ObjectInterface $object)
+    {
+        $namespace = get_class($object);
+
+        $className = explode(
+            '\\',
+            strtolower($namespace)
+        );
+
+        return '/' . end($className) . 's';
+    }
+
     public function getObject(ObjectInterface $item)
     {
         $response = $this->getBaseResponse()
             ->withLink('self', $item->getSelfUri())
-            ->withLink('collection', $item->getCollectionUri());
+            ->withLink('collection', $this->getCollectionUri($item));
 
         foreach ($item->jsonSerialize() as $propertyKey => $value) {
             $response = $response->withKeyValue($propertyKey, $value);

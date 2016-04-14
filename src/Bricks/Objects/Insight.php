@@ -45,11 +45,6 @@ final class Insight
         return $this->get('update')->getTimestamp();
     }
 
-    public function getCollectionUri()
-    {
-        return '/insights/';
-    }
-
     public function getselfuri()
     {
         return '/insight/' . $this->getTimestamp();

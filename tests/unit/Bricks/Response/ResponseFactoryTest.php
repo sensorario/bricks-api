@@ -11,10 +11,9 @@ final class ResponseFactoryTest extends PHPUnit_Framework_TestCase
         $this->factory = new ResponseFactory();
 
         $this->objectInterface = $this
-            ->getMockBuilder('Bricks\\Objects\\ObjectInterface')
+            ->getMockBuilder('Bricks\\Objects\\Interfaces\\ObjectInterface')
             ->setMethods([
                 'jsonSerialize',
-                'getCollectionUri',
                 'getSelfUri'
             ])->getMock();
 
@@ -25,10 +24,6 @@ final class ResponseFactoryTest extends PHPUnit_Framework_TestCase
             ]));
 
         $this->objectInterface->expects($this->once())
-            ->method('getCollectionUri')
-            ->will($this->returnValue('/foo/'));
-
-        $this->objectInterface->expects($this->once())
             ->method('getSelfUri')
             ->will($this->returnValue('/bar/'));
     }
@@ -36,6 +31,10 @@ final class ResponseFactoryTest extends PHPUnit_Framework_TestCase
     public function testRetrieveInformationFromAnObjectInterfaceChild()
     {
         $response = $this->factory->getObject($this->objectInterface);
+
+        $resourceName = $this->factory->getCollectionUri(
+            $this->objectInterface
+        );
 
         $this->assertEquals(
             [
@@ -48,7 +47,7 @@ final class ResponseFactoryTest extends PHPUnit_Framework_TestCase
                         'href' => 'http://localhost:8080/api/v1/bar/',
                         'rel' => 'self',
                     ],[
-                        'href' => 'http://localhost:8080/api/v1/foo/',
+                        'href' => 'http://localhost:8080/api/v1' . $resourceName,
                         'rel' => 'collection',
                     ],
                 ],

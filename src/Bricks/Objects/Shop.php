@@ -45,11 +45,6 @@ final class Shop
         );
     }
 
-    public function getCollectionUri()
-    {
-        return '/shops/';
-    }
-
     public function getSelfUri()
     {
         return '/shop/' . $this->getSlug();

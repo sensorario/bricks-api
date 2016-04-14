@@ -40,11 +40,6 @@ final class Set
         ];
     }
 
-    public function getCollectionUri()
-    {
-        return '/sets/';
-    }
-
     public function getSelfUri()
     {
         return '/set/' . $this->get('code');
