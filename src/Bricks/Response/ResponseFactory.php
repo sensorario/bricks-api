@@ -34,13 +34,8 @@ class ResponseFactory
     public function getCollectionUri(ObjectInterface $object)
     {
         $namespace = get_class($object);
-
-        $className = explode(
-            '\\',
-            strtolower($namespace)
-        );
-
-        return '/' . end($className) . 's';
+        $className = explode('\\', strtolower($namespace));
+        return '/' . end($className);
     }
 
     public function getObject(ObjectInterface $item)

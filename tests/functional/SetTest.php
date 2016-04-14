@@ -108,10 +108,10 @@ class SetCreationTest extends WebTestCase
     public function getResources()
     {
         return [
-            ['sets'],
+            ['set'],
             ['homepage'],
-            ['shops'],
-            ['insights'],
+            ['shop'],
+            ['insight'],
             ['stats'],
         ];
     }

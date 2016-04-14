@@ -110,7 +110,7 @@ $app->get('/api/v1/homepage/', function () use ($app) {
     return new JsonResponse($json->asArray(), 200);
 });
 
-$app->get('/api/v1/sets/', function () use ($app) {
+$app->get('/api/v1/set/', function () use ($app) {
     $sets = [];
     $links = [];
 
@@ -133,7 +133,7 @@ $app->get('/api/v1/sets/', function () use ($app) {
     return new JsonResponse($json->asArray(), 200);
 });
 
-$app->get('/api/v1/insights/', function () use ($app) {
+$app->get('/api/v1/insight/', function () use ($app) {
     $insights = [];
     $links = [];
 
@@ -154,7 +154,7 @@ $app->get('/api/v1/insights/', function () use ($app) {
     return new JsonResponse($json->asArray(), 200);
 });
 
-$app->get('/api/v1/shops/', function () use ($app) {
+$app->get('/api/v1/shop/', function () use ($app) {
     $shops = [];
     $links = [];
 

@@ -8,8 +8,8 @@ Feature: all end points must be available
         | uri         |
         | "/homepage" |
         | "/stats"    |
-        | "/shops"    |
-        | "/insights" |
+        | "/shop"    |
+        | "/insight" |
 
     Scenario: a client look for an end point
         Given go to "/some-invalid-url"
