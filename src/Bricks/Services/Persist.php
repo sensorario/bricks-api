@@ -2,7 +2,7 @@
 
 namespace Bricks\Services;
 
-use Bricks\Objects\ObjectInterface;
+use Bricks\Objects\Interfaces\ObjectInterface;
 use JsonSerializable;
 use Psr\Log\LoggerInterface;
 

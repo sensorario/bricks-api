@@ -2,7 +2,7 @@
 
 namespace Bricks\Services;
 
-use Bricks\Objects\ObjectInterface;
+use Bricks\Objects\Interfaces\ObjectInterface;
 
 class NamesGenerator
 {

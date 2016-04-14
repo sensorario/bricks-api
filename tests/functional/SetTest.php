@@ -2,7 +2,8 @@
 
 namespace Bricks\Services;
 
-use Bricks\Files;
+Use Bricks\Files;
+use Bricks\Objects\Interfaces\ObjectInterface;
 use Bricks\Response\ErrorResponse;
 use Bricks\Services\Persist;
 use Silex\WebTestCase;
