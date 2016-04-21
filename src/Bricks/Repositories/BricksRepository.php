@@ -6,8 +6,13 @@ use Bricks\Files;
 
 final class BricksRepository
 {
-    public function findAllBricks()
+    public function findAll()
     {
-        return file(Files::RESOURCE_INSIGHT);
+        return file(Files::RESOURCE_SET);
+    }
+
+    public function deleteAll()
+    {
+        unlink(Files::RESOURCE_SET);
     }
 }

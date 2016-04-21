@@ -115,4 +115,11 @@ class SetCreationTest extends WebTestCase
             ['/stats/'],
         ];
     }
+
+    public function testThatSingleSetIsProperlyDisplayed()
+    {
+        $this->markTestIncomplete(
+            'Do this test ASAP'
+        );
+    }
 }
