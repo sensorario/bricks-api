@@ -63,7 +63,6 @@ $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
         }
     }
 
-    /** @todo define an error table with api error code */
     return new JsonResponse([
         'status' => 'error',
         'code' => 404,
@@ -84,7 +83,6 @@ $app->get('/api/v1/shop/{slug}', function ($slug) use ($app) {
         }
     }
 
-    /** @todo define an error table with api error code */
     return new JsonResponse([
         'status' => 'error',
         'code' => 404,
@@ -104,7 +102,6 @@ $app->delete('/api/v1/set/{code}', function ($code) use ($app) {
         if ($item->get('code') != $code) {
             (new Persist(
                 $item,
-                /** @todo define this service at the beginning of this file */
                 new Bricks\Services\NamesGenerator(),
                 $app['logger']
             ))->persist();
@@ -145,7 +142,6 @@ $app->get('/api/v1/set/', function () use ($app) {
         $item = unserialize($set);
         $sets[] = $item->jsonSerialize();
 
-        /** @todo introduce LinkValue Object */
         $links[] = [
             'rel' => 'set ' . $item->get('code'),
             'href' => '/set/' . $item->get('code')
@@ -169,7 +165,6 @@ $app->get('/api/v1/insight/', function () use ($app) {
         $insight = unserialize($item);
         $insights[] = $insight->jsonSerialize();
 
-        /** @todo introduce LinkValue Object */
         $links[] = ['rel' => 'set ' . $insight->get('set'), 'href' => '/set/' . $insight->get('set')];
         $links[] = ['rel' => 'set ' . $insight->get('shop'), 'href' => '/shop/' . $insight->get('shop')];
         $links[] = ['rel' => 'insight ' . $insight->getTimestamp(), 'href' => '/insight/' . $insight->getTimestamp()];
@@ -193,7 +188,6 @@ $app->get('/api/v1/shop/', function () use ($app) {
         $links[] = ['rel' => 'shop ' . $shop->getSlug(), 'href' => '/shop/' . $shop->getSlug()];
     }
 
-    /** @todo cover this route with end2end test */
     $json = $app['response']->getCollection('/shop/', $shops, $links);
     return new JsonResponse($json->asArray(), 200);
 });
