@@ -37,8 +37,10 @@ $app->after(function (Request $request, Response $response) {
 });
 
 $app->get('/api/v1/stats/', function () use ($app) {
-    $json = $app['response']->getStatistics();
-    return new JsonResponse($json->asArray());
+    $response = $app['response'];
+    $json = $response->getStatistics();
+    $array = $json->asArray();
+    return new JsonResponse($array);
 });
 
 $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
