@@ -129,7 +129,7 @@ $app->get('/api/v1/set/', function () use ($app) {
     }
 
 
-    $json = $app['response']->getCollection('/sets/', $sets, $links);
+    $json = $app['response']->getCollection('/set/', $sets, $links);
     return new JsonResponse($json->asArray(), 200);
 });
 
