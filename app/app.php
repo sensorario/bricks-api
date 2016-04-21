@@ -3,6 +3,7 @@
 use Bricks\Objects\Insight;
 use Bricks\Objects\Set;
 use Bricks\Objects\Shop;
+use Bricks\Repositories\BricksRepository;
 use Bricks\Response\ErrorResponse;
 use Bricks\Services\Persist;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,6 +26,10 @@ $app['response'] = function () {
     return new Bricks\Response\ResponseFactory();
 };
 
+$app['bricks_entity'] = function () {
+    return new BricksRepository();
+};
+
 $app->before(function (Request $request) {
     if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
         $data = json_decode($request->getContent(), true);
@@ -44,7 +49,7 @@ $app->get('/api/v1/stats/', function () use ($app) {
 });
 
 $app->get('/api/v1/insight/{timestamp}', function ($timestamp) use ($app) {
-    $insightCollection = file(Bricks\Files::RESOURCE_INSIGHT);
+    $insightCollection = $app['bricks_entity']->findAll();
     foreach ($insightCollection as $insightItem) {
         $insight = unserialize($insightItem);
         if ($insight->getTimestamp() == $timestamp) {
@@ -107,7 +112,7 @@ $app->get('/api/v1/set/{code}', function ($code) use ($app) {
     }
 });
 
-$app->get('/api/v1/homepage/', function () use ($app) {
+$app->get('/api/v1/', function () use ($app) {
     $json = $app['response']->getHomepage();
     return new JsonResponse($json->asArray(), 200);
 });
@@ -152,7 +157,7 @@ $app->get('/api/v1/insight/', function () use ($app) {
         }
     }
 
-    $json = $app['response']->getCollection('/insights/', $insights, $links);
+    $json = $app['response']->getCollection('/insight/', $insights, $links);
     return new JsonResponse($json->asArray(), 200);
 });
 
@@ -169,7 +174,8 @@ $app->get('/api/v1/shop/', function () use ($app) {
         }
     }
 
-    $json = $app['response']->getCollection('/shops/', $shops, $links);
+    /** @todo cover this route with end2end test */
+    $json = $app['response']->getCollection('/shop/', $shops, $links);
     return new JsonResponse($json->asArray(), 200);
 });
 

@@ -41,7 +41,7 @@ final class ResponseFactoryTest extends PHPUnit_Framework_TestCase
                 'foo' => 'bar',
                 'links' => [
                     [
-                        'href' => 'http://localhost:8080/api/v1/homepage/',
+                        'href' => 'http://localhost:8080/api/v1/',
                         'rel' => 'homepage',
                     ],[
                         'href' => 'http://localhost:8080/api/v1/bar/',

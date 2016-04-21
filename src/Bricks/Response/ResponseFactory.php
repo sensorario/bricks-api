@@ -10,15 +10,15 @@ class ResponseFactory
     public function getBaseResponse()
     {
         return Response::createEmpty()
-            ->withLink('homepage', '/homepage/');
+            ->withLink('homepage', '/');
     }
 
     public function getHomepage()
     {
         return $this->getBaseResponse()
-            ->withLink('sets', '/sets/')
-            ->withLink('shops', '/shops/')
-            ->withLink('insights', '/insights/')
+            ->withLink('sets', '/set/')
+            ->withLink('shops', '/shop/')
+            ->withLink('insights', '/insight/')
             ->withLink('stats', '/stats/');
     }
 

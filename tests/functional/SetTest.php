@@ -96,7 +96,7 @@ class SetCreationTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $path = 'http://localhost::8080/api/v1/' . $resource . '/'
+            $path = 'http://localhost::8080/api/v1' . $resource
         );
 
         $this->assertEquals(
@@ -108,11 +108,11 @@ class SetCreationTest extends WebTestCase
     public function getResources()
     {
         return [
-            ['set'],
-            ['homepage'],
-            ['shop'],
-            ['insight'],
-            ['stats'],
+            ['/set/'],
+            ['/'],
+            ['/shop/'],
+            ['/insight/'],
+            ['/stats/'],
         ];
     }
 }

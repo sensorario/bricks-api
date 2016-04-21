@@ -6,10 +6,11 @@ Feature: all end points must be available
 
     Examples:
         | uri         |
-        | "/homepage" |
+        | "/" |
         | "/stats"    |
         | "/shop"    |
         | "/insight" |
+        | "/set" |
 
     Scenario: a client look for an end point
         Given go to "/some-invalid-url"
