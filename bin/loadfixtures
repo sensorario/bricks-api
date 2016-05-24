@@ -36,11 +36,22 @@ curl -vH "Content-Type: application/json" -X POST --data "{
     \"address\":\"Piazzale della Cooperazione, 4, 47122 Forlì FC\"
 }" http://localhost:8080/api/v1/shop/
 
+curl -vH "Content-Type: application/json" -X POST --data "{
+    \"name\":\"Amazon\",
+    \"address\":\"http://www.amazon.it/\"
+}" http://localhost:8080/api/v1/shop/
+
 # all insights
 curl -vH "Content-Type: application/json" -X POST --data "{
     \"shop\":\"toys-center\",
     \"set\":\"75105\",
     \"value\":\"15800\"
+}" http://localhost:8080/api/v1/insight/
+
+curl -vH "Content-Type: application/json" -X POST --data "{
+    \"shop\":\"amazon\",
+    \"set\":\"21304\",
+    \"value\":\"5599\"
 }" http://localhost:8080/api/v1/insight/
 
 # Delete Ghostbuster Set
